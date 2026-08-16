@@ -29,53 +29,42 @@
             font-size: 28px;
         }
 
-        header p {
-            margin-top: 5px;
-        }
-
         .container {
             max-width: 1200px;
-            margin: 30px auto;
+            margin: auto;
             padding: 20px;
         }
 
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .card {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.10);
             text-align: center;
         }
 
         .card h2 {
-            margin-bottom: 10px;
             color: #1565c0;
-        }
-
-        .card p {
-            color: #666;
+            margin-bottom: 8px;
         }
 
         .menu {
-            margin-top: 30px;
             background: white;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.10);
-        }
-
-        .menu h2 {
-            margin-bottom: 15px;
+            margin-bottom: 25px;
         }
 
         .menu button {
-            padding: 12px 20px;
+            padding: 12px 18px;
             margin: 5px;
             border: none;
             border-radius: 8px;
@@ -88,64 +77,314 @@
             background: #0d47a1;
         }
 
-        footer {
-            margin-top: 40px;
-            text-align: center;
+        .inventory {
+            background: white;
             padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+        }
+
+        .inventory h2 {
+            margin-bottom: 15px;
+            color: #1565c0;
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            width: 100%;
+        }
+
+        .btn-add {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .search {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #1565c0;
+            color: white;
+        }
+
+        .low-stock {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 7px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
             color: #777;
+        }
+
+        @media (max-width: 700px) {
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 7px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>🔧 FERRE SYSTEM</h1>
-        <p>Sistema Administrativo para Ferretería</p>
-    </header>
+<header>
+    <h1>🔧 FERRE SYSTEM</h1>
+    <p>Sistema Administrativo para Ferretería</p>
+</header>
 
-    <div class="container">
+<div class="container">
 
-        <div class="dashboard">
+    <div class="dashboard">
 
-            <div class="card">
-                <h2>📦 Productos</h2>
-                <p>Administrar inventario</p>
-            </div>
-
-            <div class="card">
-                <h2>💰 Ventas</h2>
-                <p>Registrar y consultar ventas</p>
-            </div>
-
-            <div class="card">
-                <h2>👥 Clientes</h2>
-                <p>Administrar clientes</p>
-            </div>
-
-            <div class="card">
-                <h2>💵 Caja</h2>
-                <p>Control de ingresos y egresos</p>
-            </div>
-
+        <div class="card">
+            <h2>📦 Productos</h2>
+            <p id="totalProductos">0 productos</p>
         </div>
 
-        <div class="menu">
-            <h2>Menú principal</h2>
+        <div class="card">
+            <h2>💰 Ventas</h2>
+            <p>Próximamente</p>
+        </div>
 
-            <button>Productos</button>
-            <button>Ventas</button>
-            <button>Clientes</button>
-            <button>Proveedores</button>
-            <button>Inventario</button>
-            <button>Reportes</button>
+        <div class="card">
+            <h2>👥 Clientes</h2>
+            <p>Próximamente</p>
+        </div>
+
+        <div class="card">
+            <h2>💵 Caja</h2>
+            <p>Próximamente</p>
         </div>
 
     </div>
 
-    <footer>
-        Ferre System © 2026
-    </footer>
+    <div class="menu">
+        <h2>Menú principal</h2>
+
+        <button onclick="mostrarProductos()">Productos</button>
+        <button>Ventas</button>
+        <button>Clientes</button>
+        <button>Proveedores</button>
+        <button>Inventario</button>
+        <button>Reportes</button>
+    </div>
+
+    <section class="inventory" id="productos">
+
+        <h2>📦 Gestión de Productos</h2>
+
+        <div class="form">
+
+            <input type="text" id="codigo" placeholder="Código">
+
+            <input type="text" id="nombre" placeholder="Nombre del producto">
+
+            <input type="text" id="categoria" placeholder="Categoría">
+
+            <input type="number" id="stock" placeholder="Existencia">
+
+            <input type="number" id="minimo" placeholder="Stock mínimo">
+
+            <input type="number" id="costo" placeholder="Precio de costo">
+
+            <input type="number" id="precio" placeholder="Precio de venta">
+
+            <button class="btn-add" onclick="agregarProducto()">
+                ➕ Agregar producto
+            </button>
+
+        </div>
+
+        <div class="search">
+            <input
+                type="text"
+                id="buscar"
+                placeholder="🔎 Buscar producto..."
+                oninput="mostrarProductos()">
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Costo</th>
+                    <th>Venta</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+
+            <tbody id="tablaProductos"></tbody>
+
+        </table>
+
+    </section>
+
+</div>
+
+<footer>
+    Ferre System © 2026
+</footer>
+
+<script>
+
+    let productos = JSON.parse(localStorage.getItem("productosFerre")) || [];
+
+    function guardarProductos() {
+        localStorage.setItem(
+            "productosFerre",
+            JSON.stringify(productos)
+        );
+    }
+
+    function agregarProducto() {
+
+        const codigo = document.getElementById("codigo").value.trim();
+        const nombre = document.getElementById("nombre").value.trim();
+        const categoria = document.getElementById("categoria").value.trim();
+        const stock = Number(document.getElementById("stock").value);
+        const minimo = Number(document.getElementById("minimo").value);
+        const costo = Number(document.getElementById("costo").value);
+        const precio = Number(document.getElementById("precio").value);
+
+        if (!codigo || !nombre) {
+            alert("Ingresa al menos el código y el nombre del producto.");
+            return;
+        }
+
+        productos.push({
+            codigo,
+            nombre,
+            categoria,
+            stock,
+            minimo,
+            costo,
+            precio
+        });
+
+        guardarProductos();
+
+        limpiarFormulario();
+        mostrarProductos();
+    }
+
+    function eliminarProducto(indice) {
+
+        if (confirm("¿Deseas eliminar este producto?")) {
+
+            productos.splice(indice, 1);
+
+            guardarProductos();
+            mostrarProductos();
+        }
+    }
+
+    function limpiarFormulario() {
+
+        document.getElementById("codigo").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("categoria").value = "";
+        document.getElementById("stock").value = "";
+        document.getElementById("minimo").value = "";
+        document.getElementById("costo").value = "";
+        document.getElementById("precio").value = "";
+    }
+
+    function mostrarProductos() {
+
+        const tabla = document.getElementById("tablaProductos");
+        const busqueda = document
+            .getElementById("buscar")
+            .value
+            .toLowerCase();
+
+        tabla.innerHTML = "";
+
+        const filtrados = productos.filter(producto =>
+            producto.nombre.toLowerCase().includes(busqueda) ||
+            producto.codigo.toLowerCase().includes(busqueda)
+        );
+
+        filtrados.forEach((producto) => {
+
+            const indice = productos.indexOf(producto);
+
+            const estado =
+                producto.stock <= producto.minimo
+                ? '<span class="low-stock">⚠️ Stock bajo</span>'
+                : "Disponible";
+
+            tabla.innerHTML += `
+                <tr>
+                    <td>${producto.codigo}</td>
+                    <td>${producto.nombre}</td>
+                    <td>${producto.categoria}</td>
+                    <td>${producto.stock}</td>
+                    <td>$${producto.costo.toFixed(2)}</td>
+                    <td>$${producto.precio.toFixed(2)}</td>
+                    <td>${estado}</td>
+                    <td>
+                        <button
+                            class="delete-btn"
+                            onclick="eliminarProducto(${indice})">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("totalProductos").innerText =
+            productos.length + " productos";
+    }
+
+    mostrarProductos();
+
+</script>
 
 </body>
 </html>
