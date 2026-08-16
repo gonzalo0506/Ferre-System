@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FERRE-SYSTEM</title>
+    <title>Ferre System</title>
 
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
         }
 
         body {
-            background: #f2f4f7;
-            color: #17202a;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
         }
 
         header {
-            background: #123456;
+            background: #1565c0;
             color: white;
             padding: 20px;
             text-align: center;
@@ -31,151 +31,121 @@
 
         header p {
             margin-top: 5px;
-            opacity: 0.8;
         }
 
-        .menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 20px;
-            max-width: 1000px;
-            margin: auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
         }
 
         .card {
             background: white;
+            padding: 25px;
             border-radius: 12px;
-            padding: 25px 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
             text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            cursor: pointer;
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-        }
-
-        .icon {
-            font-size: 35px;
+        .card h2 {
             margin-bottom: 10px;
+            color: #1565c0;
         }
 
-        .dashboard {
-            max-width: 1000px;
-            margin: auto;
-            padding: 0 20px 30px;
+        .card p {
+            color: #666;
         }
 
-        .dashboard h2 {
-            margin-bottom: 15px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .stat {
+        .menu {
+            margin-top: 30px;
             background: white;
             padding: 20px;
             border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
         }
 
-        .stat span {
+        .menu h2 {
+            margin-bottom: 15px;
+        }
+
+        .menu button {
+            padding: 12px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            background: #1565c0;
+            color: white;
+            cursor: pointer;
+        }
+
+        .menu button:hover {
+            background: #0d47a1;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
             color: #777;
-        }
-
-        .stat strong {
-            display: block;
-            font-size: 25px;
-            margin-top: 8px;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🔧 FERRE-SYSTEM</h1>
-    <p>Administración inteligente para ferreterías</p>
-</header>
+    <header>
+        <h1>🔧 FERRE SYSTEM</h1>
+        <p>Sistema Administrativo para Ferretería</p>
+    </header>
 
-<section class="menu">
+    <div class="container">
 
-    <div class="card">
-        <div class="icon">📦</div>
-        <h3>Inventario</h3>
-    </div>
+        <div class="dashboard">
 
-    <div class="card">
-        <div class="icon">🛒</div>
-        <h3>Ventas</h3>
-    </div>
+            <div class="card">
+                <h2>📦 Productos</h2>
+                <p>Administrar inventario</p>
+            </div>
 
-    <div class="card">
-        <div class="icon">💰</div>
-        <h3>Caja</h3>
-    </div>
+            <div class="card">
+                <h2>💰 Ventas</h2>
+                <p>Registrar y consultar ventas</p>
+            </div>
 
-    <div class="card">
-        <div class="icon">💸</div>
-        <h3>Gastos</h3>
-    </div>
+            <div class="card">
+                <h2>👥 Clientes</h2>
+                <p>Administrar clientes</p>
+            </div>
 
-    <div class="card">
-        <div class="icon">🔑</div>
-        <h3>Llaves</h3>
-    </div>
+            <div class="card">
+                <h2>💵 Caja</h2>
+                <p>Control de ingresos y egresos</p>
+            </div>
 
-    <div class="card">
-        <div class="icon">🚚</div>
-        <h3>Proveedores</h3>
-    </div>
-
-    <div class="card">
-        <div class="icon">👥</div>
-        <h3>Clientes</h3>
-    </div>
-
-    <div class="card">
-        <div class="icon">📊</div>
-        <h3>Reportes</h3>
-    </div>
-
-</section>
-
-<section class="dashboard">
-
-    <h2>📊 Resumen del día</h2>
-
-    <div class="stats">
-
-        <div class="stat">
-            <span>Ventas</span>
-            <strong>$0.00</strong>
         </div>
 
-        <div class="stat">
-            <span>Gastos</span>
-            <strong>$0.00</strong>
-        </div>
+        <div class="menu">
+            <h2>Menú principal</h2>
 
-        <div class="stat">
-            <span>Ganancia</span>
-            <strong>$0.00</strong>
-        </div>
-
-        <div class="stat">
-            <span>Productos vendidos</span>
-            <strong>0</strong>
+            <button>Productos</button>
+            <button>Ventas</button>
+            <button>Clientes</button>
+            <button>Proveedores</button>
+            <button>Inventario</button>
+            <button>Reportes</button>
         </div>
 
     </div>
 
-</section>
+    <footer>
+        Ferre System © 2026
+    </footer>
 
 </body>
 </html>
-
