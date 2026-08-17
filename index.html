@@ -29,10 +29,6 @@
             font-size: 28px;
         }
 
-        header p {
-            margin-top: 5px;
-        }
-
         .container {
             max-width: 1200px;
             margin: auto;
@@ -85,14 +81,15 @@
             background: #0d47a1;
         }
 
-        .inventory {
+        section {
             background: white;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+            margin-bottom: 25px;
         }
 
-        .inventory h2 {
+        section h2 {
             color: #1565c0;
             margin-bottom: 15px;
         }
@@ -104,11 +101,16 @@
             margin-bottom: 20px;
         }
 
-        input {
+        input,
+        select {
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 7px;
             width: 100%;
+        }
+
+        button {
+            cursor: pointer;
         }
 
         .btn-add {
@@ -117,7 +119,6 @@
             border: none;
             border-radius: 7px;
             padding: 12px;
-            cursor: pointer;
         }
 
         .btn-update {
@@ -126,7 +127,6 @@
             border: none;
             border-radius: 7px;
             padding: 12px;
-            cursor: pointer;
         }
 
         .btn-cancel {
@@ -135,7 +135,22 @@
             border: none;
             border-radius: 7px;
             padding: 12px;
-            cursor: pointer;
+        }
+
+        .btn-entry {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 12px;
+        }
+
+        .btn-exit {
+            background: #c62828;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 12px;
         }
 
         .search {
@@ -147,7 +162,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             border-bottom: 1px solid #ddd;
             text-align: left;
@@ -169,7 +185,6 @@
             border: none;
             padding: 7px 10px;
             border-radius: 5px;
-            cursor: pointer;
             margin-right: 4px;
         }
 
@@ -179,14 +194,16 @@
             border: none;
             padding: 7px 10px;
             border-radius: 5px;
-            cursor: pointer;
         }
 
-        .editing {
-            border: 2px solid #ef6c00;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        .entry-text {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .exit-text {
+            color: #c62828;
+            font-weight: bold;
         }
 
         footer {
@@ -196,12 +213,12 @@
         }
 
         @media (max-width: 700px) {
-            .inventory {
+            section {
                 overflow-x: auto;
             }
 
             table {
-                min-width: 850px;
+                min-width: 800px;
             }
         }
     </style>
@@ -224,12 +241,12 @@
         </div>
 
         <div class="card">
-            <h2>💰 Ventas</h2>
-            <p>Próximamente</p>
+            <h2>📊 Stock</h2>
+            <p id="totalStock">0 unidades</p>
         </div>
 
         <div class="card">
-            <h2>👥 Clientes</h2>
+            <h2>💰 Ventas</h2>
             <p>Próximamente</p>
         </div>
 
@@ -244,54 +261,52 @@
 
         <h2>Menú principal</h2>
 
-        <button onclick="mostrarProductos()">📦 Productos</button>
+        <button onclick="irA('productos')">📦 Productos</button>
+        <button onclick="irA('movimientos')">📋 Inventario</button>
         <button>💰 Ventas</button>
         <button>👥 Clientes</button>
         <button>🚚 Proveedores</button>
-        <button>📋 Inventario</button>
         <button>📊 Reportes</button>
 
     </div>
 
-    <section class="inventory" id="productos">
+    <!-- PRODUCTOS -->
+
+    <section id="productos">
 
         <h2>📦 Gestión de Productos</h2>
 
-        <div id="formularioProducto">
+        <div class="form">
 
-            <div class="form">
+            <input id="codigo" type="text" placeholder="Código">
 
-                <input type="text" id="codigo" placeholder="Código">
+            <input id="nombre" type="text" placeholder="Nombre del producto">
 
-                <input type="text" id="nombre" placeholder="Nombre del producto">
+            <input id="categoria" type="text" placeholder="Categoría">
 
-                <input type="text" id="categoria" placeholder="Categoría">
+            <input id="stock" type="number" placeholder="Existencia">
 
-                <input type="number" id="stock" placeholder="Existencia">
+            <input id="minimo" type="number" placeholder="Stock mínimo">
 
-                <input type="number" id="minimo" placeholder="Stock mínimo">
+            <input id="costo" type="number" placeholder="Precio de costo">
 
-                <input type="number" id="costo" placeholder="Precio de costo">
+            <input id="precio" type="number" placeholder="Precio de venta">
 
-                <input type="number" id="precio" placeholder="Precio de venta">
-
-                <button
-                    id="btnGuardar"
-                    class="btn-add"
-                    onclick="guardarProducto()">
-                    ➕ Agregar producto
-                </button>
-
-            </div>
+            <button
+                id="btnGuardar"
+                class="btn-add"
+                onclick="guardarProducto()">
+                ➕ Agregar producto
+            </button>
 
         </div>
 
         <div class="search">
 
             <input
-                type="text"
                 id="buscar"
-                placeholder="🔎 Buscar por código o producto..."
+                type="text"
+                placeholder="🔎 Buscar producto..."
                 oninput="mostrarProductos()">
 
         </div>
@@ -299,7 +314,6 @@
         <table>
 
             <thead>
-
                 <tr>
                     <th>Código</th>
                     <th>Producto</th>
@@ -310,10 +324,78 @@
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
-
             </thead>
 
             <tbody id="tablaProductos"></tbody>
+
+        </table>
+
+    </section>
+
+    <!-- MOVIMIENTOS -->
+
+    <section id="movimientos">
+
+        <h2>📋 Movimientos de Inventario</h2>
+
+        <div class="form">
+
+            <select id="productoMovimiento">
+                <option value="">Seleccionar producto</option>
+            </select>
+
+            <select id="tipoMovimiento">
+
+                <option value="entrada">
+                    📥 Entrada de mercancía
+                </option>
+
+                <option value="salida">
+                    📤 Salida de mercancía
+                </option>
+
+            </select>
+
+            <input
+                id="cantidadMovimiento"
+                type="number"
+                min="1"
+                placeholder="Cantidad">
+
+            <input
+                id="motivoMovimiento"
+                type="text"
+                placeholder="Motivo / referencia">
+
+            <button
+                class="btn-entry"
+                onclick="registrarMovimiento()">
+                Registrar movimiento
+            </button>
+
+        </div>
+
+        <h3>Historial de movimientos</h3>
+
+        <br>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Fecha</th>
+                    <th>Producto</th>
+                    <th>Movimiento</th>
+                    <th>Cantidad</th>
+                    <th>Stock anterior</th>
+                    <th>Stock nuevo</th>
+                    <th>Motivo</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaMovimientos"></tbody>
 
         </table>
 
@@ -325,19 +407,28 @@
     Ferre System © 2026
 </footer>
 
+
 <script>
 
     let productos =
         JSON.parse(localStorage.getItem("productosFerre")) || [];
 
+    let movimientos =
+        JSON.parse(localStorage.getItem("movimientosFerre")) || [];
+
     let productoEditando = null;
 
 
-    function guardarEnMemoria() {
+    function guardarDatos() {
 
         localStorage.setItem(
             "productosFerre",
             JSON.stringify(productos)
+        );
+
+        localStorage.setItem(
+            "movimientosFerre",
+            JSON.stringify(movimientos)
         );
 
     }
@@ -370,7 +461,7 @@
         if (!codigo || !nombre) {
 
             alert(
-                "Ingresa al menos el código y el nombre del producto."
+                "Ingresa al menos el código y el nombre."
             );
 
             return;
@@ -378,15 +469,13 @@
 
 
         const producto = {
-
-            codigo: codigo,
-            nombre: nombre,
-            categoria: categoria,
-            stock: stock,
-            minimo: minimo,
-            costo: costo,
-            precio: precio
-
+            codigo,
+            nombre,
+            categoria,
+            stock,
+            minimo,
+            costo,
+            precio
         };
 
 
@@ -403,11 +492,13 @@
         }
 
 
-        guardarEnMemoria();
+        guardarDatos();
 
         limpiarFormulario();
 
         mostrarProductos();
+
+        cargarProductosMovimiento();
 
     }
 
@@ -441,18 +532,14 @@
         productoEditando = indice;
 
 
-        const boton =
-            document.getElementById("btnGuardar");
+        document.getElementById("btnGuardar").innerText =
+            "💾 Guardar cambios";
 
-        boton.innerText = "💾 Guardar cambios";
+        document.getElementById("btnGuardar").className =
+            "btn-update";
 
-        boton.className = "btn-update";
 
-
-        document.getElementById("productos")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
+        irA("productos");
 
     }
 
@@ -467,9 +554,11 @@
 
             productos.splice(indice, 1);
 
-            guardarEnMemoria();
+            guardarDatos();
 
             mostrarProductos();
+
+            cargarProductosMovimiento();
 
         }
 
@@ -496,12 +585,11 @@
         productoEditando = null;
 
 
-        const boton =
-            document.getElementById("btnGuardar");
+        document.getElementById("btnGuardar").innerText =
+            "➕ Agregar producto";
 
-        boton.innerText = "➕ Agregar producto";
-
-        boton.className = "btn-add";
+        document.getElementById("btnGuardar").className =
+            "btn-add";
 
     }
 
@@ -512,8 +600,7 @@
             document.getElementById("tablaProductos");
 
         const busqueda =
-            document
-                .getElementById("buscar")
+            document.getElementById("buscar")
                 .value
                 .toLowerCase();
 
@@ -521,74 +608,301 @@
         tabla.innerHTML = "";
 
 
-        const filtrados =
-            productos.filter(producto =>
-
+        productos
+            .filter(producto =>
                 producto.nombre
                     .toLowerCase()
                     .includes(busqueda)
-
                 ||
-
                 producto.codigo
                     .toLowerCase()
                     .includes(busqueda)
+            )
+            .forEach(producto => {
 
+                const indice =
+                    productos.indexOf(producto);
+
+
+                const estado =
+                    producto.stock <= producto.minimo
+
+                    ?
+
+                    '<span class="low-stock">⚠️ Stock bajo</span>'
+
+                    :
+
+                    "Disponible";
+
+
+                tabla.innerHTML += `
+
+                    <tr>
+
+                        <td>${producto.codigo}</td>
+
+                        <td>${producto.nombre}</td>
+
+                        <td>${producto.categoria}</td>
+
+                        <td>${producto.stock}</td>
+
+                        <td>$${Number(producto.costo).toFixed(2)}</td>
+
+                        <td>$${Number(producto.precio).toFixed(2)}</td>
+
+                        <td>${estado}</td>
+
+                        <td>
+
+                            <button
+                                class="edit-btn"
+                                onclick="editarProducto(${indice})">
+                                ✏️
+                            </button>
+
+                            <button
+                                class="delete-btn"
+                                onclick="eliminarProducto(${indice})">
+                                🗑️
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+
+        document.getElementById("totalProductos")
+            .innerText =
+            productos.length + " productos";
+
+
+        const total =
+            productos.reduce(
+                (suma, producto) =>
+                    suma + Number(producto.stock),
+                0
             );
 
 
-        filtrados.forEach(producto => {
+        document.getElementById("totalStock")
+            .innerText =
+            total + " unidades";
 
-            const indice =
-                productos.indexOf(producto);
+    }
 
 
-            const estado =
+    function cargarProductosMovimiento() {
 
-                producto.stock <= producto.minimo
+        const select =
+            document.getElementById("productoMovimiento");
 
-                ?
 
-                '<span class="low-stock">⚠️ Stock bajo</span>'
+        select.innerHTML =
+            '<option value="">Seleccionar producto</option>';
 
-                :
 
-                "Disponible";
+        productos.forEach((producto, indice) => {
+
+            select.innerHTML += `
+
+                <option value="${indice}">
+                    ${producto.codigo} - ${producto.nombre}
+                    (Stock: ${producto.stock})
+                </option>
+
+            `;
+
+        });
+
+    }
+
+
+    function registrarMovimiento() {
+
+        const indice =
+            document.getElementById(
+                "productoMovimiento"
+            ).value;
+
+
+        const tipo =
+            document.getElementById(
+                "tipoMovimiento"
+            ).value;
+
+
+        const cantidad =
+            Number(
+                document.getElementById(
+                    "cantidadMovimiento"
+                ).value
+            );
+
+
+        const motivo =
+            document.getElementById(
+                "motivoMovimiento"
+            ).value.trim();
+
+
+        if (indice === "") {
+
+            alert("Selecciona un producto.");
+
+            return;
+
+        }
+
+
+        if (!cantidad || cantidad <= 0) {
+
+            alert("Ingresa una cantidad válida.");
+
+            return;
+
+        }
+
+
+        const producto =
+            productos[Number(indice)];
+
+
+        const stockAnterior =
+            Number(producto.stock);
+
+
+        let stockNuevo;
+
+
+        if (tipo === "entrada") {
+
+            stockNuevo =
+                stockAnterior + cantidad;
+
+        } else {
+
+            if (cantidad > stockAnterior) {
+
+                alert(
+                    "No hay suficiente stock para realizar esta salida."
+                );
+
+                return;
+
+            }
+
+            stockNuevo =
+                stockAnterior - cantidad;
+
+        }
+
+
+        producto.stock = stockNuevo;
+
+
+        movimientos.unshift({
+
+            fecha:
+                new Date().toLocaleString("es-MX"),
+
+            producto:
+                producto.nombre,
+
+            tipo:
+                tipo,
+
+            cantidad:
+                cantidad,
+
+            anterior:
+                stockAnterior,
+
+            nuevo:
+                stockNuevo,
+
+            motivo:
+                motivo || "Sin especificar"
+
+        });
+
+
+        guardarDatos();
+
+        mostrarProductos();
+
+        cargarProductosMovimiento();
+
+        mostrarMovimientos();
+
+
+        document.getElementById(
+            "cantidadMovimiento"
+        ).value = "";
+
+        document.getElementById(
+            "motivoMovimiento"
+        ).value = "";
+
+
+        alert(
+            tipo === "entrada"
+                ? "Entrada registrada correctamente."
+                : "Salida registrada correctamente."
+        );
+
+    }
+
+
+    function mostrarMovimientos() {
+
+        const tabla =
+            document.getElementById(
+                "tablaMovimientos"
+            );
+
+
+        tabla.innerHTML = "";
+
+
+        movimientos.forEach(movimiento => {
+
+            const clase =
+                movimiento.tipo === "entrada"
+                    ? "entry-text"
+                    : "exit-text";
+
+
+            const texto =
+                movimiento.tipo === "entrada"
+                    ? "📥 Entrada"
+                    : "📤 Salida";
 
 
             tabla.innerHTML += `
 
                 <tr>
 
-                    <td>${producto.codigo}</td>
+                    <td>${movimiento.fecha}</td>
 
-                    <td>${producto.nombre}</td>
+                    <td>${movimiento.producto}</td>
 
-                    <td>${producto.categoria}</td>
-
-                    <td>${producto.stock}</td>
-
-                    <td>$${Number(producto.costo).toFixed(2)}</td>
-
-                    <td>$${Number(producto.precio).toFixed(2)}</td>
-
-                    <td>${estado}</td>
-
-                    <td>
-
-                        <button
-                            class="edit-btn"
-                            onclick="editarProducto(${indice})">
-                            ✏️
-                        </button>
-
-                        <button
-                            class="delete-btn"
-                            onclick="eliminarProducto(${indice})">
-                            🗑️
-                        </button>
-
+                    <td class="${clase}">
+                        ${texto}
                     </td>
+
+                    <td>${movimiento.cantidad}</td>
+
+                    <td>${movimiento.anterior}</td>
+
+                    <td>${movimiento.nuevo}</td>
+
+                    <td>${movimiento.motivo}</td>
 
                 </tr>
 
@@ -596,15 +910,24 @@
 
         });
 
+    }
 
-        document.getElementById("totalProductos")
-            .innerText =
-            productos.length + " productos";
+
+    function irA(id) {
+
+        document.getElementById(id)
+            .scrollIntoView({
+                behavior: "smooth"
+            });
 
     }
 
 
     mostrarProductos();
+
+    cargarProductosMovimiento();
+
+    mostrarMovimientos();
 
 </script>
 
