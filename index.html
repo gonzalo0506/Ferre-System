@@ -37,7 +37,7 @@ header h1 {
 
 .dashboard {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -74,6 +74,11 @@ header h1 {
     border-radius: 8px;
     background: #1565c0;
     color: white;
+    cursor: pointer;
+}
+
+.menu button:hover {
+    background: #0d47a1;
 }
 
 section {
@@ -115,20 +120,35 @@ button {
     color: white;
 }
 
-.btn-add {
-    background: #2e7d32;
-}
-
-.btn-sale {
+.btn-blue {
     background: #1565c0;
 }
 
-.btn-delete {
+.btn-green {
+    background: #2e7d32;
+}
+
+.btn-orange {
+    background: #ef6c00;
+}
+
+.btn-red {
     background: #c62828;
 }
 
-.btn-edit {
-    background: #ef6c00;
+.total {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: right;
+    margin: 20px 0;
+}
+
+.cash-balance {
+    font-size: 32px;
+    font-weight: bold;
+    color: #2e7d32;
+    text-align: center;
+    padding: 20px;
 }
 
 table {
@@ -148,24 +168,17 @@ th {
     color: white;
 }
 
-.total {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: right;
-    margin: 20px 0;
-}
-
 .low-stock {
     color: #c62828;
     font-weight: bold;
 }
 
-.entry {
+.income {
     color: #2e7d32;
     font-weight: bold;
 }
 
-.exit {
+.expense {
     color: #c62828;
     font-weight: bold;
 }
@@ -197,6 +210,8 @@ footer {
 
 <div class="container">
 
+<!-- DASHBOARD -->
+
 <div class="dashboard">
 
     <div class="card">
@@ -216,39 +231,43 @@ footer {
 
     <div class="card">
         <h2>💵 Caja</h2>
-        <p>Próximamente</p>
+        <p id="saldoCaja">$0.00</p>
     </div>
 
 </div>
+
+
+<!-- MENU -->
 
 <div class="menu">
 
     <h2>Menú principal</h2>
 
-    <button class="btn btn-sale"
-        onclick="irA('ventas')">
+    <button onclick="irA('ventas')">
         💰 Ventas
     </button>
 
-    <button class="btn btn-sale"
-        onclick="irA('productos')">
+    <button onclick="irA('productos')">
         📦 Productos
     </button>
 
-    <button class="btn btn-sale"
-        onclick="irA('movimientos')">
+    <button onclick="irA('movimientos')">
         📋 Inventario
     </button>
 
-    <button class="btn btn-sale">
+    <button onclick="irA('caja')">
+        💵 Caja
+    </button>
+
+    <button>
         👥 Clientes
     </button>
 
-    <button class="btn btn-sale">
+    <button>
         🚚 Proveedores
     </button>
 
-    <button class="btn btn-sale">
+    <button>
         📊 Reportes
     </button>
 
@@ -263,21 +282,21 @@ footer {
 
 <div class="form">
 
-    <select id="productoVenta">
-        <option value="">Seleccionar producto</option>
-    </select>
+<select id="productoVenta">
+<option value="">Seleccionar producto</option>
+</select>
 
-    <input
-        id="cantidadVenta"
-        type="number"
-        min="1"
-        placeholder="Cantidad">
+<input
+id="cantidadVenta"
+type="number"
+min="1"
+placeholder="Cantidad">
 
-    <button
-        class="btn btn-add"
-        onclick="agregarAlCarrito()">
-        ➕ Agregar
-    </button>
+<button
+class="btn btn-green"
+onclick="agregarAlCarrito()">
+➕ Agregar
+</button>
 
 </div>
 
@@ -290,11 +309,11 @@ footer {
 
 <thead>
 <tr>
-    <th>Producto</th>
-    <th>Cantidad</th>
-    <th>Precio</th>
-    <th>Subtotal</th>
-    <th>Acción</th>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Precio</th>
+<th>Subtotal</th>
+<th>Acción</th>
 </tr>
 </thead>
 
@@ -304,33 +323,33 @@ footer {
 
 
 <div class="total">
-    Total: $<span id="totalCarrito">0.00</span>
+Total: $<span id="totalCarrito">0.00</span>
 </div>
 
 
 <div class="form">
 
-    <select id="formaPago">
+<select id="formaPago">
 
-        <option value="Efectivo">
-            💵 Efectivo
-        </option>
+<option value="Efectivo">
+💵 Efectivo
+</option>
 
-        <option value="Tarjeta">
-            💳 Tarjeta
-        </option>
+<option value="Tarjeta">
+💳 Tarjeta
+</option>
 
-        <option value="Transferencia">
-            📱 Transferencia
-        </option>
+<option value="Transferencia">
+📱 Transferencia
+</option>
 
-    </select>
+</select>
 
-    <button
-        class="btn btn-sale"
-        onclick="realizarVenta()">
-        🧾 Registrar venta
-    </button>
+<button
+class="btn btn-blue"
+onclick="realizarVenta()">
+🧾 Registrar venta
+</button>
 
 </div>
 
@@ -345,44 +364,33 @@ footer {
 
 <div class="form">
 
-<input id="codigo"
-       placeholder="Código">
+<input id="codigo" placeholder="Código">
 
-<input id="nombre"
-       placeholder="Nombre">
+<input id="nombre" placeholder="Nombre">
 
-<input id="categoria"
-       placeholder="Categoría">
+<input id="categoria" placeholder="Categoría">
 
-<input id="stock"
-       type="number"
-       placeholder="Stock">
+<input id="stock" type="number" placeholder="Stock">
 
-<input id="minimo"
-       type="number"
-       placeholder="Stock mínimo">
+<input id="minimo" type="number" placeholder="Stock mínimo">
 
-<input id="costo"
-       type="number"
-       placeholder="Costo">
+<input id="costo" type="number" placeholder="Costo">
 
-<input id="precio"
-       type="number"
-       placeholder="Precio de venta">
+<input id="precio" type="number" placeholder="Precio de venta">
 
 <button
-    id="btnGuardar"
-    class="btn btn-add"
-    onclick="guardarProducto()">
-    ➕ Agregar producto
+id="btnGuardar"
+class="btn btn-green"
+onclick="guardarProducto()">
+➕ Agregar producto
 </button>
 
 </div>
 
 <input
-    id="buscar"
-    placeholder="🔎 Buscar producto..."
-    oninput="mostrarProductos()">
+id="buscar"
+placeholder="🔎 Buscar producto..."
+oninput="mostrarProductos()">
 
 <br><br>
 
@@ -390,14 +398,14 @@ footer {
 
 <thead>
 <tr>
-    <th>Código</th>
-    <th>Producto</th>
-    <th>Categoría</th>
-    <th>Stock</th>
-    <th>Costo</th>
-    <th>Venta</th>
-    <th>Estado</th>
-    <th>Acciones</th>
+<th>Código</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Stock</th>
+<th>Costo</th>
+<th>Venta</th>
+<th>Estado</th>
+<th>Acciones</th>
 </tr>
 </thead>
 
@@ -443,7 +451,7 @@ id="motivoMovimiento"
 placeholder="Motivo">
 
 <button
-class="btn btn-add"
+class="btn btn-green"
 onclick="registrarMovimiento()">
 Registrar movimiento
 </button>
@@ -471,7 +479,81 @@ Registrar movimiento
 </section>
 
 
-<!-- HISTORIAL DE VENTAS -->
+<!-- CAJA -->
+
+<section id="caja">
+
+<h2>💵 Caja</h2>
+
+<div class="cash-balance">
+Saldo actual:
+<br>
+<span id="saldoCajaGrande">$0.00</span>
+</div>
+
+
+<h3>Movimiento manual de caja</h3>
+
+<br>
+
+<div class="form">
+
+<select id="tipoCaja">
+
+<option value="ingreso">
+➕ Ingreso
+</option>
+
+<option value="gasto">
+➖ Gasto
+</option>
+
+</select>
+
+<input
+id="montoCaja"
+type="number"
+min="0.01"
+step="0.01"
+placeholder="Monto">
+
+<input
+id="conceptoCaja"
+placeholder="Concepto">
+
+<button
+class="btn btn-blue"
+onclick="registrarMovimientoCaja()">
+Registrar movimiento
+</button>
+
+</div>
+
+
+<h3>Historial de Caja</h3>
+
+<br>
+
+<table>
+
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Monto</th>
+<th>Forma de pago</th>
+</tr>
+</thead>
+
+<tbody id="tablaCaja"></tbody>
+
+</table>
+
+</section>
+
+
+<!-- HISTORIAL VENTAS -->
 
 <section>
 
@@ -513,10 +595,15 @@ JSON.parse(localStorage.getItem("movimientosFerre")) || [];
 let ventas =
 JSON.parse(localStorage.getItem("ventasFerre")) || [];
 
+let caja =
+JSON.parse(localStorage.getItem("cajaFerre")) || [];
+
 let carrito = [];
 
 let productoEditando = null;
 
+
+/* GUARDAR DATOS */
 
 function guardarDatos() {
 
@@ -534,8 +621,15 @@ function guardarDatos() {
         "ventasFerre",
         JSON.stringify(ventas)
     );
+
+    localStorage.setItem(
+        "cajaFerre",
+        JSON.stringify(caja)
+    );
 }
 
+
+/* PRODUCTOS */
 
 function guardarProducto() {
 
@@ -590,7 +684,6 @@ function guardarProducto() {
     limpiarFormulario();
 
     actualizarTodo();
-
 }
 
 
@@ -703,13 +796,13 @@ function mostrarProductos() {
             <td>
 
                 <button
-                class="btn btn-edit"
+                class="btn btn-orange"
                 onclick="editarProducto(${indice})">
                 ✏️
                 </button>
 
                 <button
-                class="btn btn-delete"
+                class="btn btn-red"
                 onclick="eliminarProducto(${indice})">
                 🗑️
                 </button>
@@ -729,7 +822,8 @@ function mostrarProductos() {
 
     const stockTotal =
     productos.reduce(
-        (total, p) => total + Number(p.stock),
+        (total, p) =>
+        total + Number(p.stock),
         0
     );
 
@@ -739,6 +833,8 @@ function mostrarProductos() {
     stockTotal + " unidades";
 }
 
+
+/* PRODUCTOS PARA SELECT */
 
 function cargarProductos() {
 
@@ -759,21 +855,27 @@ function cargarProductos() {
     productos.forEach((p, indice) => {
 
         venta.innerHTML += `
+
         <option value="${indice}">
         ${p.nombre} - $${p.precio} - Stock: ${p.stock}
         </option>
+
         `;
 
 
         movimiento.innerHTML += `
+
         <option value="${indice}">
         ${p.codigo} - ${p.nombre} - Stock: ${p.stock}
         </option>
+
         `;
 
     });
 }
 
+
+/* CARRITO */
 
 function agregarAlCarrito() {
 
@@ -808,12 +910,15 @@ function agregarAlCarrito() {
 
     const existente =
         carrito.find(
-            item => item.indice === Number(indice)
+            item =>
+            item.indice === Number(indice)
         );
 
 
     const cantidadActual =
-        existente ? existente.cantidad : 0;
+        existente
+        ? existente.cantidad
+        : 0;
 
 
     if (
@@ -835,16 +940,20 @@ function agregarAlCarrito() {
 
         carrito.push({
 
-            indice: Number(indice),
+            indice:
+            Number(indice),
 
-            cantidad: cantidad
+            cantidad:
+            cantidad
 
         });
 
     }
 
 
-    document.getElementById("cantidadVenta").value = "";
+    document.getElementById(
+        "cantidadVenta"
+    ).value = "";
 
     mostrarCarrito();
 }
@@ -853,55 +962,64 @@ function agregarAlCarrito() {
 function mostrarCarrito() {
 
     const tabla =
-        document.getElementById("tablaCarrito");
+        document.getElementById(
+            "tablaCarrito"
+        );
 
     tabla.innerHTML = "";
 
     let total = 0;
 
 
-    carrito.forEach((item, posicion) => {
+    carrito.forEach(
+        (item, posicion) => {
 
-        const producto =
-            productos[item.indice];
+            const producto =
+                productos[item.indice];
 
-        const subtotal =
-            producto.precio * item.cantidad;
+            const subtotal =
+                producto.precio *
+                item.cantidad;
 
-        total += subtotal;
-
-
-        tabla.innerHTML += `
-
-        <tr>
-
-            <td>${producto.nombre}</td>
-
-            <td>${item.cantidad}</td>
-
-            <td>$${Number(producto.precio).toFixed(2)}</td>
-
-            <td>$${subtotal.toFixed(2)}</td>
-
-            <td>
-
-                <button
-                class="btn btn-delete"
-                onclick="quitarDelCarrito(${posicion})">
-                🗑️
-                </button>
-
-            </td>
-
-        </tr>
-
-        `;
-
-    });
+            total += subtotal;
 
 
-    document.getElementById("totalCarrito")
-    .innerText =
+            tabla.innerHTML += `
+
+            <tr>
+
+                <td>${producto.nombre}</td>
+
+                <td>${item.cantidad}</td>
+
+                <td>
+                $${Number(producto.precio).toFixed(2)}
+                </td>
+
+                <td>
+                $${subtotal.toFixed(2)}
+                </td>
+
+                <td>
+
+                    <button
+                    class="btn btn-red"
+                    onclick="quitarDelCarrito(${posicion})">
+                    🗑️
+                    </button>
+
+                </td>
+
+            </tr>
+
+            `;
+        }
+    );
+
+
+    document.getElementById(
+        "totalCarrito"
+    ).innerText =
     total.toFixed(2);
 }
 
@@ -913,6 +1031,8 @@ function quitarDelCarrito(posicion) {
     mostrarCarrito();
 }
 
+
+/* REALIZAR VENTA */
 
 function realizarVenta() {
 
@@ -932,7 +1052,11 @@ function realizarVenta() {
         const producto =
             productos[item.indice];
 
-        if (item.cantidad > producto.stock) {
+
+        if (
+            item.cantidad >
+            producto.stock
+        ) {
 
             alert(
                 "No hay suficiente stock de " +
@@ -942,6 +1066,7 @@ function realizarVenta() {
             return;
         }
 
+
         total +=
             producto.precio *
             item.cantidad;
@@ -949,7 +1074,9 @@ function realizarVenta() {
 
 
     const pago =
-        document.getElementById("formaPago").value;
+        document.getElementById(
+            "formaPago"
+        ).value;
 
 
     const detalle =
@@ -958,16 +1085,18 @@ function realizarVenta() {
             const p =
                 productos[item.indice];
 
-            const stockAnterior =
+            const anterior =
                 p.stock;
 
-            p.stock -= item.cantidad;
+            p.stock -=
+                item.cantidad;
 
 
             movimientos.unshift({
 
                 fecha:
-                new Date().toLocaleString("es-MX"),
+                new Date()
+                .toLocaleString("es-MX"),
 
                 producto:
                 p.nombre,
@@ -979,7 +1108,7 @@ function realizarVenta() {
                 item.cantidad,
 
                 anterior:
-                stockAnterior,
+                anterior,
 
                 nuevo:
                 p.stock,
@@ -1009,7 +1138,8 @@ function realizarVenta() {
     ventas.unshift({
 
         fecha:
-        new Date().toLocaleString("es-MX"),
+        new Date()
+        .toLocaleString("es-MX"),
 
         total:
         total,
@@ -1023,6 +1153,36 @@ function realizarVenta() {
     });
 
 
+    /*
+    SOLO LAS VENTAS EN EFECTIVO
+    ENTRAN AL SALDO DE CAJA.
+    */
+
+    if (pago === "Efectivo") {
+
+        caja.unshift({
+
+            fecha:
+            new Date()
+            .toLocaleString("es-MX"),
+
+            tipo:
+            "ingreso",
+
+            concepto:
+            "Venta",
+
+            monto:
+            total,
+
+            pago:
+            "Efectivo"
+
+        });
+
+    }
+
+
     carrito = [];
 
     guardarDatos();
@@ -1033,17 +1193,23 @@ function realizarVenta() {
 
 
     alert(
-        "Venta registrada correctamente.\nTotal: $" +
-        total.toFixed(2)
+        "Venta registrada correctamente.\n\n" +
+        "Total: $" +
+        total.toFixed(2) +
+        "\nForma de pago: " +
+        pago
     );
-
 }
 
+
+/* HISTORIAL DE VENTAS */
 
 function mostrarVentas() {
 
     const tabla =
-        document.getElementById("tablaVentas");
+        document.getElementById(
+            "tablaVentas"
+        );
 
     tabla.innerHTML = "";
 
@@ -1066,7 +1232,9 @@ function mostrarVentas() {
 
             <td>${venta.fecha}</td>
 
-            <td>$${Number(venta.total).toFixed(2)}</td>
+            <td>
+            $${Number(venta.total).toFixed(2)}
+            </td>
 
             <td>${venta.pago}</td>
 
@@ -1087,11 +1255,14 @@ function mostrarVentas() {
         );
 
 
-    document.getElementById("totalVentas")
-    .innerText =
+    document.getElementById(
+        "totalVentas"
+    ).innerText =
     "$" + total.toFixed(2);
 }
 
+
+/* INVENTARIO */
 
 function registrarMovimiento() {
 
@@ -1169,7 +1340,8 @@ function registrarMovimiento() {
     movimientos.unshift({
 
         fecha:
-        new Date().toLocaleString("es-MX"),
+        new Date()
+        .toLocaleString("es-MX"),
 
         producto:
         producto.nombre,
@@ -1199,85 +1371,5 @@ function registrarMovimiento() {
 
     document.getElementById(
         "cantidadMovimiento"
-    ).value = "";
+    
 
-    document.getElementById(
-        "motivoMovimiento"
-    ).value = "";
-
-}
-
-
-function mostrarMovimientos() {
-
-    const tabla =
-        document.getElementById(
-            "tablaMovimientos"
-        );
-
-    tabla.innerHTML = "";
-
-
-    movimientos.forEach(m => {
-
-        const texto =
-            m.tipo === "entrada"
-            ? "📥 Entrada"
-            : "📤 Salida";
-
-
-        tabla.innerHTML += `
-
-        <tr>
-
-            <td>${m.fecha}</td>
-
-            <td>${m.producto}</td>
-
-            <td>${texto}</td>
-
-            <td>${m.cantidad}</td>
-
-            <td>${m.anterior}</td>
-
-            <td>${m.nuevo}</td>
-
-            <td>${m.motivo}</td>
-
-        </tr>
-
-        `;
-
-    });
-}
-
-
-function actualizarTodo() {
-
-    mostrarProductos();
-
-    cargarProductos();
-
-    mostrarMovimientos();
-
-    mostrarVentas();
-
-}
-
-
-function irA(id) {
-
-    document.getElementById(id)
-    .scrollIntoView({
-        behavior: "smooth"
-    });
-
-}
-
-
-actualizarTodo();
-
-</script>
-
-</body>
-</html>
