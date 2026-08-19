@@ -907,3 +907,1067 @@
 
 </body>
 </html>
+<!-- =========================================================
+     FERRE-SYSTEM - PARTE 2
+     VENTAS + CAJA
+     ========================================================= -->
+
+
+<style>
+
+    .ventas-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .venta-productos {
+        display: flex;
+        gap: 10px;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .venta-productos .campo {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .lista-venta {
+        margin-top: 20px;
+        overflow-x: auto;
+    }
+
+    .total-venta {
+        margin-top: 20px;
+        padding: 18px;
+        background: #f2f4f7;
+        border-radius: 10px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .movimiento-caja {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .caja-total {
+        font-size: 28px;
+        font-weight: bold;
+        color: #17365d;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .mensaje-vacio {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+    }
+
+    @media (max-width: 800px) {
+
+        .ventas-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .movimiento-caja {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+</style>
+
+
+<!-- =========================================================
+     SECCIÓN VENTAS
+     ========================================================= -->
+
+<section class="panel">
+
+    <h2>🛒 Ventas</h2>
+
+    <div class="ventas-grid">
+
+        <!-- NUEVA VENTA -->
+
+        <div>
+
+            <h3>Nueva venta</h3>
+
+            <div class="venta-productos">
+
+                <div class="campo">
+
+                    <label>Producto</label>
+
+                    <select id="ventaProducto">
+
+                        <option value="">
+                            Selecciona un producto
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Cantidad</label>
+
+                    <input
+                        type="number"
+                        id="ventaCantidad"
+                        min="1"
+                        value="1"
+                    >
+
+                </div>
+
+
+                <button
+                    class="btn-principal"
+                    onclick="agregarProductoVenta()"
+                >
+                    Agregar
+                </button>
+
+            </div>
+
+
+            <div class="lista-venta">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                            <th></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="listaVenta"></tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="total-venta">
+
+                Total:
+                $<span id="totalVenta">0.00</span>
+
+            </div>
+
+
+            <div class="campo" style="margin-top:15px;">
+
+                <label>Forma de pago</label>
+
+                <select id="formaPago">
+
+                    <option value="Efectivo">
+                        Efectivo
+                    </option>
+
+                    <option value="Tarjeta">
+                        Tarjeta
+                    </option>
+
+                    <option value="Transferencia">
+                        Transferencia
+                    </option>
+
+                    <option value="Crédito">
+                        Crédito
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="acciones-form">
+
+                <button
+                    class="btn-principal"
+                    onclick="confirmarVenta()"
+                >
+                    Confirmar venta
+                </button>
+
+                <button
+                    class="btn-cancelar"
+                    onclick="cancelarVenta()"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- CAJA -->
+
+        <div>
+
+            <h3>💰 Caja del día</h3>
+
+            <div class="caja-total">
+
+                $<span id="cajaActual">0.00</span>
+
+            </div>
+
+            <p style="text-align:center;">
+                Saldo actual de caja
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ENTRADAS Y SALIDAS
+     ========================================================= -->
+
+<section class="panel">
+
+    <h2>💰 Movimientos de caja</h2>
+
+    <div class="movimiento-caja">
+
+        <div>
+
+            <h3>➕ Entrada</h3>
+
+            <div class="campo">
+
+                <label>Concepto</label>
+
+                <input
+                    type="text"
+                    id="entradaConcepto"
+                    placeholder="Ej. Dinero inicial"
+                >
+
+            </div>
+
+            <div class="campo" style="margin-top:10px;">
+
+                <label>Monto</label>
+
+                <input
+                    type="number"
+                    id="entradaMonto"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+            <button
+                class="btn-principal"
+                style="margin-top:10px;"
+                onclick="registrarEntrada()"
+            >
+                Registrar entrada
+            </button>
+
+        </div>
+
+
+        <div>
+
+            <h3>➖ Salida</h3>
+
+            <div class="campo">
+
+                <label>Concepto</label>
+
+                <input
+                    type="text"
+                    id="salidaConcepto"
+                    placeholder="Ej. Compra de material"
+                >
+
+            </div>
+
+            <div class="campo" style="margin-top:10px;">
+
+                <label>Monto</label>
+
+                <input
+                    type="number"
+                    id="salidaMonto"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+            <button
+                class="btn-eliminar"
+                style="margin-top:10px;"
+                onclick="registrarSalidaCaja()"
+            >
+                Registrar salida
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     REPORTE DIARIO
+     ========================================================= -->
+
+<section class="panel">
+
+    <h2>📊 Reporte de ventas diario</h2>
+
+    <div class="resumen">
+
+        <div class="tarjeta">
+
+            Ventas
+
+            <strong id="reporteNumeroVentas">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="tarjeta">
+
+            Total vendido
+
+            <strong>
+                $<span id="reporteTotalVentas">
+                    0.00
+                </span>
+            </strong>
+
+        </div>
+
+
+        <div class="tarjeta">
+
+            Entradas
+
+            <strong>
+                $<span id="reporteEntradas">
+                    0.00
+                </span>
+            </strong>
+
+        </div>
+
+
+        <div class="tarjeta">
+
+            Salidas
+
+            <strong>
+                $<span id="reporteSalidas">
+                    0.00
+                </span>
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+    // =====================================================
+    // DATOS DE VENTAS Y CAJA
+    // =====================================================
+
+    let ventas =
+        JSON.parse(
+            localStorage.getItem("ferre_ventas")
+        ) || [];
+
+
+    let movimientosCaja =
+        JSON.parse(
+            localStorage.getItem("ferre_caja")
+        ) || [];
+
+
+    let ventaActual = [];
+
+
+    // =====================================================
+    // GUARDAR VENTAS Y CAJA
+    // =====================================================
+
+    function guardarVentasCaja() {
+
+        localStorage.setItem(
+            "ferre_ventas",
+            JSON.stringify(ventas)
+        );
+
+
+        localStorage.setItem(
+            "ferre_caja",
+            JSON.stringify(movimientosCaja)
+        );
+
+    }
+
+
+    // =====================================================
+    // CARGAR PRODUCTOS EN SELECT
+    // =====================================================
+
+    function cargarProductosVenta() {
+
+        const select =
+            document.getElementById(
+                "ventaProducto"
+            );
+
+
+        select.innerHTML = `
+
+            <option value="">
+                Selecciona un producto
+            </option>
+
+        `;
+
+
+        productos.forEach(
+            (producto, indice) => {
+
+                const option =
+                    document.createElement("option");
+
+
+                option.value = indice;
+
+
+                option.textContent =
+                    `${producto.nombre} | Stock: ${producto.stock} | $${Number(producto.precio || 0).toFixed(2)}`;
+
+
+                select.appendChild(option);
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // AGREGAR PRODUCTO A VENTA
+    // =====================================================
+
+    function agregarProductoVenta() {
+
+        const indice =
+            document.getElementById(
+                "ventaProducto"
+            ).value;
+
+
+        const cantidad =
+            Number(
+                document.getElementById(
+                    "ventaCantidad"
+                ).value
+            );
+
+
+        if (indice === "") {
+
+            alert(
+                "Selecciona un producto."
+            );
+
+            return;
+        }
+
+
+        if (!cantidad || cantidad <= 0) {
+
+            alert(
+                "Ingresa una cantidad válida."
+            );
+
+            return;
+        }
+
+
+        const producto =
+            productos[Number(indice)];
+
+
+        if (!producto) {
+
+            alert(
+                "Producto no encontrado."
+            );
+
+            return;
+        }
+
+
+        const existente =
+            ventaActual.find(
+                item =>
+                item.indice === Number(indice)
+            );
+
+
+        const cantidadActual =
+            existente
+            ? existente.cantidad
+            : 0;
+
+
+        if (
+            cantidadActual + cantidad >
+            producto.stock
+        ) {
+
+            alert(
+                "No hay suficiente stock disponible."
+            );
+
+            return;
+        }
+
+
+        if (existente) {
+
+            existente.cantidad += cantidad;
+
+        } else {
+
+            ventaActual.push({
+
+                indice:
+                    Number(indice),
+
+                cantidad:
+                    cantidad
+
+            });
+
+        }
+
+
+        mostrarVentaActual();
+
+    }
+
+
+    // =====================================================
+    // MOSTRAR VENTA ACTUAL
+    // =====================================================
+
+    function mostrarVentaActual() {
+
+        const tabla =
+            document.getElementById(
+                "listaVenta"
+            );
+
+
+        tabla.innerHTML = "";
+
+
+        let total = 0;
+
+
+        ventaActual.forEach(
+            (item, posicion) => {
+
+                const producto =
+                    productos[item.indice];
+
+
+                const subtotal =
+                    Number(producto.precio || 0) *
+                    item.cantidad;
+
+
+                total += subtotal;
+
+
+                const fila =
+                    document.createElement("tr");
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(producto.nombre)}
+                    </td>
+
+                    <td>
+                        ${item.cantidad}
+                    </td>
+
+                    <td>
+                        $${Number(producto.precio || 0).toFixed(2)}
+                    </td>
+
+                    <td>
+                        $${subtotal.toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-eliminar"
+                            onclick="quitarProductoVenta(${posicion})"
+                        >
+                            🗑️
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                tabla.appendChild(fila);
+
+            }
+        );
+
+
+        document.getElementById(
+            "totalVenta"
+        ).textContent =
+            total.toFixed(2);
+
+    }
+
+
+    // =====================================================
+    // QUITAR PRODUCTO DE VENTA
+    // =====================================================
+
+    function quitarProductoVenta(posicion) {
+
+        ventaActual.splice(
+            posicion,
+            1
+        );
+
+
+        mostrarVentaActual();
+
+    }
+
+
+    // =====================================================
+    // CONFIRMAR VENTA
+    // =====================================================
+
+    function confirmarVenta() {
+
+        if (ventaActual.length === 0) {
+
+            alert(
+                "Agrega al menos un producto."
+            );
+
+            return;
+        }
+
+
+        const formaPago =
+            document.getElementById(
+                "formaPago"
+            ).value;
+
+
+        let total = 0;
+
+
+        ventaActual.forEach(
+            item => {
+
+                const producto =
+                    productos[item.indice];
+
+
+                total +=
+                    Number(producto.precio || 0) *
+                    item.cantidad;
+
+            }
+        );
+
+
+        const confirmar =
+            confirm(
+                `¿Confirmar venta por $${total.toFixed(2)}?`
+            );
+
+
+        if (!confirmar) {
+
+            return;
+        }
+
+
+        // ---------------------------------------------
+        // DESCONTAR INVENTARIO
+        // ---------------------------------------------
+
+        ventaActual.forEach(
+            item => {
+
+                const producto =
+                    productos[item.indice];
+
+
+                producto.stock -=
+                    item.cantidad;
+
+            }
+        );
+
+
+        // ---------------------------------------------
+        // REGISTRAR VENTA
+        // ---------------------------------------------
+
+        ventas.unshift({
+
+            fecha:
+                new Date().toLocaleString(
+                    "es-MX"
+                ),
+
+            fechaISO:
+                new Date().toISOString(),
+
+            productos:
+                ventaActual.map(
+                    item => {
+
+                        const producto =
+                            productos[item.indice];
+
+
+                        return {
+
+                            nombre:
+                                producto.nombre,
+
+                            codigo:
+                                producto.codigo,
+
+                            cantidad:
+                                item.cantidad,
+
+                            precio:
+                                Number(
+                                    producto.precio || 0
+                                ),
+
+                            costo:
+                                Number(
+                                    producto.costo || 0
+                                )
+
+                        };
+
+                    }
+                ),
+
+            total:
+                total,
+
+            formaPago:
+                formaPago
+
+        });
+
+
+        // ---------------------------------------------
+        // REGISTRAR EN CAJA
+        // ---------------------------------------------
+
+        if (
+            formaPago !== "Crédito"
+        ) {
+
+            movimientosCaja.unshift({
+
+                fecha:
+                    new Date().toLocaleString(
+                        "es-MX"
+                    ),
+
+                tipo:
+                    "entrada",
+
+                concepto:
+                    "Venta",
+
+                monto:
+                    total,
+
+                formaPago:
+                    formaPago
+
+            });
+
+        }
+
+
+        guardarDatos();
+
+        guardarVentasCaja();
+
+
+        ventaActual = [];
+
+
+        document.getElementById(
+            "ventaCantidad"
+        ).value = 1;
+
+
+        mostrarVentaActual();
+
+        cargarProductosVenta();
+
+        actualizarTodo();
+
+        actualizarCaja();
+
+        actualizarReporteDiario();
+
+
+        alert(
+            "Venta registrada correctamente."
+        );
+
+    }
+
+
+    // =====================================================
+    // CANCELAR VENTA
+    // =====================================================
+
+    function cancelarVenta() {
+
+        ventaActual = [];
+
+        mostrarVentaActual();
+
+    }
+
+
+    // =====================================================
+    // REGISTRAR ENTRADA DE CAJA
+    // =====================================================
+
+    function registrarEntrada() {
+
+        const concepto =
+            document.getElementById(
+                "entradaConcepto"
+            ).value.trim();
+
+
+        const monto =
+            Number(
+                document.getElementById(
+                    "entradaMonto"
+                ).value
+            );
+
+
+        if (!concepto) {
+
+            alert(
+                "Ingresa el concepto."
+            );
+
+            return;
+        }
+
+
+        if (!monto || monto <= 0) {
+
+            alert(
+                "Ingresa un monto válido."
+            );
+
+            return;
+        }
+
+
+        movimientosCaja.unshift({
+
+            fecha:
+                new Date().toLocaleString(
+                    "es-MX"
+                ),
+
+            fechaISO:
+                new Date().toISOString(),
+
+            tipo:
+                "entrada",
+
+            concepto:
+                concepto,
+
+            monto:
+                monto,
+
+            formaPago:
+                "Efectivo"
+
+        });
+
+
+        guardarVentasCaja();
+
+        actualizarCaja();
+
+        actualizarReporteDiario();
+
+
+        document.getElementById(
+            "entradaConcepto"
+        ).value = "";
+
+
+        document.getElementById(
+            "entradaMonto"
+        ).value = "";
+
+
+        alert(
+            "Entrada registrada."
+        );
+
+    }
+
+
+    // =====================================================
+    // REGISTRAR SALIDA DE CAJA
+    // =====================================================
+
+    function registrarSalidaCaja() {
+
+        const concepto =
+            document.getElementById(
+                "salidaConcepto"
+            ).value.trim();
+
+
+        const monto =
+            Number(
+                document.getElementById(
+                    "salidaMonto"
+                ).value
+            );
+
+
+        if (!concepto) {
+
+            alert(
+                "Ingresa el concepto."
+            );
+
+            return;
+        }
+
+
+        if (!monto || monto <= 0) {
+
+            alert(
+                "Ingresa un monto válido."
+            );
+
+            return;
+        }
+
+
+        movimientosCaja.unshift({
+
+            fecha:
+                new Date().toLocaleString(
+                    "es-MX"
+                ),
+
+            fechaISO:
+                new Date().toISOString(),
+
+            tipo:
+                "salida",
+
+            concepto:
+                concepto,
+
+            monto:
+                monto
+
+        });
+
+
+        guardarVentasCaja();
+
+        actualizarCaja();
+
+        actualizarReporteDiario();
+
+
+        document.getElementById(
+            "salidaConcepto"
+        ).value = "";
+
+
+        document.getElementById(
+            "salidaMonto"
+        ).value = "";
+
+
+        alert(
+            "Salida registrada."
+        );
+
+    }
+
+
+    // ======================================
