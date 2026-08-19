@@ -1,1379 +1,907 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ferre System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    <title>Ferre-System</title>
 
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #222;
-}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-header {
-    background: #1565c0;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            color: #222;
+        }
 
-header h1 {
-    font-size: 28px;
-}
+        header {
+            background: #17365d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
 
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;
-}
+        header p {
+            margin: 6px 0 0;
+            opacity: 0.9;
+        }
 
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,.10);
-    text-align: center;
-}
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
 
-.card h2 {
-    color: #1565c0;
-    margin-bottom: 8px;
-}
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
 
-.menu {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,.10);
-    margin-bottom: 25px;
-}
+        .panel h2 {
+            margin-top: 0;
+            color: #17365d;
+        }
 
-.menu h2 {
-    margin-bottom: 10px;
-}
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
 
-.menu button {
-    padding: 12px 18px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    background: #1565c0;
-    color: white;
-    cursor: pointer;
-}
+        .campo {
+            display: flex;
+            flex-direction: column;
+        }
 
-.menu button:hover {
-    background: #0d47a1;
-}
+        .campo label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-section {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,.10);
-    margin-bottom: 25px;
-}
+        input,
+        select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
 
-section h2 {
-    color: #1565c0;
-    margin-bottom: 15px;
-}
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
 
-.form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin-bottom: 20px;
-}
+        .btn-principal {
+            background: #17365d;
+            color: white;
+        }
 
-input,
-select {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    width: 100%;
-}
+        .btn-editar {
+            background: #e7b416;
+            color: white;
+        }
 
-button {
-    cursor: pointer;
-}
+        .btn-eliminar {
+            background: #c62828;
+            color: white;
+        }
 
-.btn {
-    border: none;
-    border-radius: 7px;
-    padding: 12px;
-    color: white;
-}
+        .btn-cancelar {
+            background: #777;
+            color: white;
+        }
 
-.btn-blue {
-    background: #1565c0;
-}
+        .acciones-form {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-.btn-green {
-    background: #2e7d32;
-}
+        .busqueda {
+            margin-bottom: 15px;
+        }
 
-.btn-orange {
-    background: #ef6c00;
-}
+        .busqueda input {
+            width: 100%;
+        }
 
-.btn-red {
-    background: #c62828;
-}
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
 
-.total {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: right;
-    margin: 20px 0;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
 
-.cash-balance {
-    font-size: 32px;
-    font-weight: bold;
-    color: #2e7d32;
-    text-align: center;
-    padding: 20px;
-}
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        th {
+            background: #17365d;
+            color: white;
+        }
 
-th,
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-}
+        tr.stock-bajo {
+            background: #fff1f1;
+        }
 
-th {
-    background: #1565c0;
-    color: white;
-}
+        .estado-normal {
+            color: #16803c;
+            font-weight: bold;
+        }
 
-.low-stock {
-    color: #c62828;
-    font-weight: bold;
-}
+        .estado-bajo {
+            color: #c62828;
+            font-weight: bold;
+        }
 
-.income {
-    color: #2e7d32;
-    font-weight: bold;
-}
+        .resumen {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
 
-.expense {
-    color: #c62828;
-    font-weight: bold;
-}
+        .tarjeta {
+            background: #f7f9fb;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
 
-footer {
-    text-align: center;
-    padding: 25px;
-    color: #777;
-}
+        .tarjeta strong {
+            display: block;
+            font-size: 28px;
+            margin-top: 5px;
+            color: #17365d;
+        }
 
-@media (max-width: 700px) {
-    section {
-        overflow-x: auto;
-    }
+        @media (max-width: 800px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
 
-    table {
-        min-width: 800px;
-    }
-}
-</style>
+            .resumen {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
-    <h1>🔧 FERRE SYSTEM</h1>
-    <p>Sistema Administrativo para Ferretería</p>
+    <h1>Ferre-System</h1>
+    <p>Administración sencilla para ferreterías</p>
 </header>
 
-<div class="container">
+<main>
+
+    <!-- RESUMEN -->
+    <section class="panel">
+
+        <h2>Resumen de inventario</h2>
+
+        <div class="resumen">
+
+            <div class="tarjeta">
+                Productos
+                <strong id="totalProductos">0</strong>
+            </div>
+
+            <div class="tarjeta">
+                Unidades
+                <strong id="totalUnidades">0</strong>
+            </div>
+
+            <div class="tarjeta">
+                Stock bajo
+                <strong id="productosBajos">0</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FORMULARIO -->
+    <section class="panel">
+
+        <h2 id="tituloFormulario">Agregar producto</h2>
+
+        <input
+            type="hidden"
+            id="indiceEdicion"
+        >
+
+        <div class="form-grid">
+
+            <div class="campo">
+                <label for="codigo">Código</label>
+                <input
+                    type="text"
+                    id="codigo"
+                    placeholder="Ej. T001"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="nombre">Producto</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    placeholder="Nombre del producto"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="familia">Familia</label>
+                <input
+                    type="text"
+                    id="familia"
+                    placeholder="Ej. Plomería"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="costo">Costo</label>
+                <input
+                    type="number"
+                    id="costo"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="precio">Precio de venta</label>
+                <input
+                    type="number"
+                    id="precio"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="stock">Existencia</label>
+                <input
+                    type="number"
+                    id="stock"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="stockMinimo">Stock mínimo</label>
+                <input
+                    type="number"
+                    id="stockMinimo"
+                    min="0"
+                    step="1"
+                    placeholder="Ej. 5"
+                >
+            </div>
 
-<!-- DASHBOARD -->
+        </div>
 
-<div class="dashboard">
+        <div class="acciones-form">
 
-    <div class="card">
-        <h2>📦 Productos</h2>
-        <p id="totalProductos">0</p>
-    </div>
+            <button
+                class="btn-principal"
+                onclick="guardarProducto()"
+            >
+                Guardar producto
+            </button>
 
-    <div class="card">
-        <h2>📊 Stock</h2>
-        <p id="totalStock">0</p>
-    </div>
+            <button
+                class="btn-cancelar"
+                id="btnCancelar"
+                onclick="cancelarEdicion()"
+                style="display:none;"
+            >
+                Cancelar edición
+            </button>
 
-    <div class="card">
-        <h2>💰 Ventas</h2>
-        <p id="totalVentas">$0.00</p>
-    </div>
+        </div>
 
-    <div class="card">
-        <h2>💵 Caja</h2>
-        <p id="saldoCaja">$0.00</p>
-    </div>
+    </section>
 
-</div>
 
+    <!-- INVENTARIO -->
+    <section class="panel">
 
-<!-- MENU -->
+        <h2>Inventario</h2>
 
-<div class="menu">
+        <div class="busqueda">
 
-    <h2>Menú principal</h2>
+            <input
+                type="text"
+                id="buscarProducto"
+                placeholder="🔎 Buscar por código, nombre o familia..."
+                oninput="mostrarInventario()"
+            >
 
-    <button onclick="irA('ventas')">
-        💰 Ventas
-    </button>
+        </div>
 
-    <button onclick="irA('productos')">
-        📦 Productos
-    </button>
+        <div class="tabla-contenedor">
 
-    <button onclick="irA('movimientos')">
-        📋 Inventario
-    </button>
+            <table>
 
-    <button onclick="irA('caja')">
-        💵 Caja
-    </button>
+                <thead>
 
-    <button>
-        👥 Clientes
-    </button>
+                    <tr>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Familia</th>
+                        <th>Costo</th>
+                        <th>Precio</th>
+                        <th>Existencia</th>
+                        <th>Mínimo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
 
-    <button>
-        🚚 Proveedores
-    </button>
+                </thead>
 
-    <button>
-        📊 Reportes
-    </button>
+                <tbody id="tablaInventario"></tbody>
 
-</div>
+            </table>
 
+        </div>
 
-<!-- VENTAS -->
+    </section>
 
-<section id="ventas">
-
-<h2>💰 Nueva Venta</h2>
-
-<div class="form">
-
-<select id="productoVenta">
-<option value="">Seleccionar producto</option>
-</select>
-
-<input
-id="cantidadVenta"
-type="number"
-min="1"
-placeholder="Cantidad">
-
-<button
-class="btn btn-green"
-onclick="agregarAlCarrito()">
-➕ Agregar
-</button>
-
-</div>
-
-
-<h3>Carrito</h3>
-
-<br>
-
-<table>
-
-<thead>
-<tr>
-<th>Producto</th>
-<th>Cantidad</th>
-<th>Precio</th>
-<th>Subtotal</th>
-<th>Acción</th>
-</tr>
-</thead>
-
-<tbody id="tablaCarrito"></tbody>
-
-</table>
-
-
-<div class="total">
-Total: $<span id="totalCarrito">0.00</span>
-</div>
-
-
-<div class="form">
-
-<select id="formaPago">
-
-<option value="Efectivo">
-💵 Efectivo
-</option>
-
-<option value="Tarjeta">
-💳 Tarjeta
-</option>
-
-<option value="Transferencia">
-📱 Transferencia
-</option>
-
-</select>
-
-<button
-class="btn btn-blue"
-onclick="realizarVenta()">
-🧾 Registrar venta
-</button>
-
-</div>
-
-</section>
-
-
-<!-- PRODUCTOS -->
-
-<section id="productos">
-
-<h2>📦 Productos</h2>
-
-<div class="form">
-
-<input id="codigo" placeholder="Código">
-
-<input id="nombre" placeholder="Nombre">
-
-<input id="categoria" placeholder="Categoría">
-
-<input id="stock" type="number" placeholder="Stock">
-
-<input id="minimo" type="number" placeholder="Stock mínimo">
-
-<input id="costo" type="number" placeholder="Costo">
-
-<input id="precio" type="number" placeholder="Precio de venta">
-
-<button
-id="btnGuardar"
-class="btn btn-green"
-onclick="guardarProducto()">
-➕ Agregar producto
-</button>
-
-</div>
-
-<input
-id="buscar"
-placeholder="🔎 Buscar producto..."
-oninput="mostrarProductos()">
-
-<br><br>
-
-<table>
-
-<thead>
-<tr>
-<th>Código</th>
-<th>Producto</th>
-<th>Categoría</th>
-<th>Stock</th>
-<th>Costo</th>
-<th>Venta</th>
-<th>Estado</th>
-<th>Acciones</th>
-</tr>
-</thead>
-
-<tbody id="tablaProductos"></tbody>
-
-</table>
-
-</section>
-
-
-<!-- INVENTARIO -->
-
-<section id="movimientos">
-
-<h2>📋 Movimientos de Inventario</h2>
-
-<div class="form">
-
-<select id="productoMovimiento">
-<option value="">Seleccionar producto</option>
-</select>
-
-<select id="tipoMovimiento">
-
-<option value="entrada">
-📥 Entrada
-</option>
-
-<option value="salida">
-📤 Salida
-</option>
-
-</select>
-
-<input
-id="cantidadMovimiento"
-type="number"
-min="1"
-placeholder="Cantidad">
-
-<input
-id="motivoMovimiento"
-placeholder="Motivo">
-
-<button
-class="btn btn-green"
-onclick="registrarMovimiento()">
-Registrar movimiento
-</button>
-
-</div>
-
-<table>
-
-<thead>
-<tr>
-<th>Fecha</th>
-<th>Producto</th>
-<th>Movimiento</th>
-<th>Cantidad</th>
-<th>Anterior</th>
-<th>Nuevo</th>
-<th>Motivo</th>
-</tr>
-</thead>
-
-<tbody id="tablaMovimientos"></tbody>
-
-</table>
-
-</section>
-
-
-<!-- CAJA -->
-
-<section id="caja">
-
-<h2>💵 Caja</h2>
-
-<div class="cash-balance">
-Saldo actual:
-<br>
-<span id="saldoCajaGrande">$0.00</span>
-</div>
-
-
-<h3>Movimiento manual de caja</h3>
-
-<br>
-
-<div class="form">
-
-<select id="tipoCaja">
-
-<option value="ingreso">
-➕ Ingreso
-</option>
-
-<option value="gasto">
-➖ Gasto
-</option>
-
-</select>
-
-<input
-id="montoCaja"
-type="number"
-min="0.01"
-step="0.01"
-placeholder="Monto">
-
-<input
-id="conceptoCaja"
-placeholder="Concepto">
-
-<button
-class="btn btn-blue"
-onclick="registrarMovimientoCaja()">
-Registrar movimiento
-</button>
-
-</div>
-
-
-<h3>Historial de Caja</h3>
-
-<br>
-
-<table>
-
-<thead>
-<tr>
-<th>Fecha</th>
-<th>Tipo</th>
-<th>Concepto</th>
-<th>Monto</th>
-<th>Forma de pago</th>
-</tr>
-</thead>
-
-<tbody id="tablaCaja"></tbody>
-
-</table>
-
-</section>
-
-
-<!-- HISTORIAL VENTAS -->
-
-<section>
-
-<h2>🧾 Historial de Ventas</h2>
-
-<table>
-
-<thead>
-<tr>
-<th>Fecha</th>
-<th>Total</th>
-<th>Pago</th>
-<th>Productos</th>
-</tr>
-</thead>
-
-<tbody id="tablaVentas"></tbody>
-
-</table>
-
-</section>
-
-</div>
-
-
-<footer>
-Ferre System © 2026
-</footer>
+</main>
 
 
 <script>
 
-let productos =
-JSON.parse(localStorage.getItem("productosFerre")) || [];
+    // =====================================================
+    // DATOS PRINCIPALES
+    // =====================================================
 
-let movimientos =
-JSON.parse(localStorage.getItem("movimientosFerre")) || [];
-
-let ventas =
-JSON.parse(localStorage.getItem("ventasFerre")) || [];
-
-let caja =
-JSON.parse(localStorage.getItem("cajaFerre")) || [];
-
-let carrito = [];
-
-let productoEditando = null;
+    let productos =
+        JSON.parse(
+            localStorage.getItem("ferre_productos")
+        ) || [];
 
 
-/* GUARDAR DATOS */
+    // =====================================================
+    // GUARDAR DATOS
+    // =====================================================
 
-function guardarDatos() {
+    function guardarDatos() {
 
-    localStorage.setItem(
-        "productosFerre",
-        JSON.stringify(productos)
-    );
+        localStorage.setItem(
+            "ferre_productos",
+            JSON.stringify(productos)
+        );
 
-    localStorage.setItem(
-        "movimientosFerre",
-        JSON.stringify(movimientos)
-    );
-
-    localStorage.setItem(
-        "ventasFerre",
-        JSON.stringify(ventas)
-    );
-
-    localStorage.setItem(
-        "cajaFerre",
-        JSON.stringify(caja)
-    );
-}
-
-
-/* PRODUCTOS */
-
-function guardarProducto() {
-
-    const producto = {
-
-        codigo:
-        document.getElementById("codigo").value.trim(),
-
-        nombre:
-        document.getElementById("nombre").value.trim(),
-
-        categoria:
-        document.getElementById("categoria").value.trim(),
-
-        stock:
-        Number(document.getElementById("stock").value),
-
-        minimo:
-        Number(document.getElementById("minimo").value),
-
-        costo:
-        Number(document.getElementById("costo").value),
-
-        precio:
-        Number(document.getElementById("precio").value)
-
-    };
-
-
-    if (!producto.codigo || !producto.nombre) {
-
-        alert("Ingresa código y nombre.");
-
-        return;
     }
 
 
-    if (productoEditando === null) {
+    // =====================================================
+    // LIMPIAR FORMULARIO
+    // =====================================================
 
-        productos.push(producto);
+    function limpiarFormulario() {
 
-    } else {
+        document.getElementById("codigo").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("familia").value = "";
+        document.getElementById("costo").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("stock").value = "";
+        document.getElementById("stockMinimo").value = "";
 
-        productos[productoEditando] = producto;
+        document.getElementById("indiceEdicion").value = "";
 
-        productoEditando = null;
+        document.getElementById(
+            "tituloFormulario"
+        ).textContent = "Agregar producto";
+
+        document.getElementById(
+            "btnCancelar"
+        ).style.display = "none";
+
     }
 
 
-    guardarDatos();
+    // =====================================================
+    // GUARDAR / MODIFICAR PRODUCTO
+    // =====================================================
 
-    limpiarFormulario();
+    function guardarProducto() {
 
-    actualizarTodo();
-}
+        const codigo =
+            document.getElementById("codigo").value.trim();
 
+        const nombre =
+            document.getElementById("nombre").value.trim();
 
-function editarProducto(indice) {
+        const familia =
+            document.getElementById("familia").value.trim();
 
-    const p = productos[indice];
+        const costo =
+            Number(document.getElementById("costo").value);
 
-    document.getElementById("codigo").value = p.codigo;
+        const precio =
+            Number(document.getElementById("precio").value);
 
-    document.getElementById("nombre").value = p.nombre;
+        const stock =
+            Number(document.getElementById("stock").value);
 
-    document.getElementById("categoria").value = p.categoria;
-
-    document.getElementById("stock").value = p.stock;
-
-    document.getElementById("minimo").value = p.minimo;
-
-    document.getElementById("costo").value = p.costo;
-
-    document.getElementById("precio").value = p.precio;
-
-    productoEditando = indice;
-
-    document.getElementById("btnGuardar").innerText =
-        "💾 Guardar cambios";
-
-    irA("productos");
-}
+        const stockMinimo =
+            Number(
+                document.getElementById("stockMinimo").value
+            );
 
 
-function eliminarProducto(indice) {
+        if (!nombre) {
 
-    if (confirm("¿Eliminar producto?")) {
+            alert("Ingresa el nombre del producto.");
+
+            return;
+        }
+
+
+        if (costo < 0 || precio < 0) {
+
+            alert("El costo y el precio no pueden ser negativos.");
+
+            return;
+        }
+
+
+        if (stock < 0 || stockMinimo < 0) {
+
+            alert("La existencia y el stock mínimo no pueden ser negativos.");
+
+            return;
+        }
+
+
+        const indice =
+            document.getElementById(
+                "indiceEdicion"
+            ).value;
+
+
+        // =================================================
+        // MODIFICAR
+        // =================================================
+
+        if (indice !== "") {
+
+            const producto =
+                productos[Number(indice)];
+
+
+            producto.codigo = codigo;
+            producto.nombre = nombre;
+            producto.familia = familia;
+            producto.costo = costo;
+            producto.precio = precio;
+            producto.stock = stock;
+            producto.stockMinimo = stockMinimo;
+
+
+            alert("Producto modificado correctamente.");
+
+        }
+
+
+        // =================================================
+        // NUEVO PRODUCTO
+        // =================================================
+
+        else {
+
+            const codigoExiste =
+                productos.some(
+                    producto =>
+                    codigo &&
+                    producto.codigo.toLowerCase() ===
+                    codigo.toLowerCase()
+                );
+
+
+            if (codigoExiste) {
+
+                alert("Ese código ya existe.");
+
+                return;
+            }
+
+
+            productos.push({
+
+                codigo:
+                    codigo,
+
+                nombre:
+                    nombre,
+
+                familia:
+                    familia,
+
+                costo:
+                    costo,
+
+                precio:
+                    precio,
+
+                stock:
+                    stock,
+
+                stockMinimo:
+                    stockMinimo,
+
+                fechaCreacion:
+                    new Date().toLocaleString("es-MX")
+
+            });
+
+
+            alert("Producto agregado correctamente.");
+
+        }
+
+
+        guardarDatos();
+
+        limpiarFormulario();
+
+        actualizarTodo();
+
+    }
+
+
+    // =====================================================
+    // EDITAR PRODUCTO
+    // =====================================================
+
+    function editarProducto(indice) {
+
+        const producto =
+            productos[indice];
+
+
+        document.getElementById("codigo").value =
+            producto.codigo || "";
+
+        document.getElementById("nombre").value =
+            producto.nombre || "";
+
+        document.getElementById("familia").value =
+            producto.familia || "";
+
+        document.getElementById("costo").value =
+            producto.costo || 0;
+
+        document.getElementById("precio").value =
+            producto.precio || 0;
+
+        document.getElementById("stock").value =
+            producto.stock || 0;
+
+        document.getElementById("stockMinimo").value =
+            producto.stockMinimo || 0;
+
+
+        document.getElementById(
+            "indiceEdicion"
+        ).value = indice;
+
+
+        document.getElementById(
+            "tituloFormulario"
+        ).textContent = "Modificar producto";
+
+
+        document.getElementById(
+            "btnCancelar"
+        ).style.display = "inline-block";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    // =====================================================
+    // ELIMINAR PRODUCTO
+    // =====================================================
+
+    function eliminarProducto(indice) {
+
+        const producto =
+            productos[indice];
+
+
+        const confirmar =
+            confirm(
+                "¿Seguro que deseas eliminar " +
+                producto.nombre +
+                "?"
+            );
+
+
+        if (!confirmar) {
+
+            return;
+        }
+
 
         productos.splice(indice, 1);
 
         guardarDatos();
 
         actualizarTodo();
-    }
-}
-
-
-function limpiarFormulario() {
-
-    [
-        "codigo",
-        "nombre",
-        "categoria",
-        "stock",
-        "minimo",
-        "costo",
-        "precio"
-    ].forEach(id => {
-
-        document.getElementById(id).value = "";
-
-    });
-
-    productoEditando = null;
-
-    document.getElementById("btnGuardar").innerText =
-        "➕ Agregar producto";
-}
-
-
-function mostrarProductos() {
-
-    const tabla =
-        document.getElementById("tablaProductos");
-
-    const buscar =
-        document.getElementById("buscar")
-        .value.toLowerCase();
-
-    tabla.innerHTML = "";
-
-
-    productos
-    .filter(p =>
-        p.nombre.toLowerCase().includes(buscar) ||
-        p.codigo.toLowerCase().includes(buscar)
-    )
-    .forEach((p, indice) => {
-
-        const estado =
-            p.stock <= p.minimo
-            ? '<span class="low-stock">⚠️ Stock bajo</span>'
-            : "Disponible";
-
-
-        tabla.innerHTML += `
-
-        <tr>
-
-            <td>${p.codigo}</td>
-
-            <td>${p.nombre}</td>
-
-            <td>${p.categoria}</td>
-
-            <td>${p.stock}</td>
-
-            <td>$${Number(p.costo).toFixed(2)}</td>
-
-            <td>$${Number(p.precio).toFixed(2)}</td>
-
-            <td>${estado}</td>
-
-            <td>
-
-                <button
-                class="btn btn-orange"
-                onclick="editarProducto(${indice})">
-                ✏️
-                </button>
-
-                <button
-                class="btn btn-red"
-                onclick="eliminarProducto(${indice})">
-                🗑️
-                </button>
-
-            </td>
-
-        </tr>
-
-        `;
-    });
-
-
-    document.getElementById("totalProductos")
-    .innerText =
-    productos.length + " productos";
-
-
-    const stockTotal =
-    productos.reduce(
-        (total, p) =>
-        total + Number(p.stock),
-        0
-    );
-
-
-    document.getElementById("totalStock")
-    .innerText =
-    stockTotal + " unidades";
-}
-
-
-/* PRODUCTOS PARA SELECT */
-
-function cargarProductos() {
-
-    const venta =
-        document.getElementById("productoVenta");
-
-    const movimiento =
-        document.getElementById("productoMovimiento");
-
-
-    venta.innerHTML =
-        '<option value="">Seleccionar producto</option>';
-
-    movimiento.innerHTML =
-        '<option value="">Seleccionar producto</option>';
-
-
-    productos.forEach((p, indice) => {
-
-        venta.innerHTML += `
-
-        <option value="${indice}">
-        ${p.nombre} - $${p.precio} - Stock: ${p.stock}
-        </option>
-
-        `;
-
-
-        movimiento.innerHTML += `
-
-        <option value="${indice}">
-        ${p.codigo} - ${p.nombre} - Stock: ${p.stock}
-        </option>
-
-        `;
-
-    });
-}
-
-
-/* CARRITO */
-
-function agregarAlCarrito() {
-
-    const indice =
-        document.getElementById("productoVenta").value;
-
-    const cantidad =
-        Number(
-            document.getElementById("cantidadVenta").value
-        );
-
-
-    if (indice === "") {
-
-        alert("Selecciona un producto.");
-
-        return;
-    }
-
-
-    if (!cantidad || cantidad <= 0) {
-
-        alert("Ingresa una cantidad válida.");
-
-        return;
-    }
-
-
-    const producto =
-        productos[Number(indice)];
-
-
-    const existente =
-        carrito.find(
-            item =>
-            item.indice === Number(indice)
-        );
-
-
-    const cantidadActual =
-        existente
-        ? existente.cantidad
-        : 0;
-
-
-    if (
-        cantidadActual + cantidad >
-        producto.stock
-    ) {
-
-        alert("No hay suficiente stock.");
-
-        return;
-    }
-
-
-    if (existente) {
-
-        existente.cantidad += cantidad;
-
-    } else {
-
-        carrito.push({
-
-            indice:
-            Number(indice),
-
-            cantidad:
-            cantidad
-
-        });
 
     }
 
 
-    document.getElementById(
-        "cantidadVenta"
-    ).value = "";
+    // =====================================================
+    // CANCELAR EDICIÓN
+    // =====================================================
 
-    mostrarCarrito();
-}
+    function cancelarEdicion() {
 
+        limpiarFormulario();
 
-function mostrarCarrito() {
-
-    const tabla =
-        document.getElementById(
-            "tablaCarrito"
-        );
-
-    tabla.innerHTML = "";
-
-    let total = 0;
-
-
-    carrito.forEach(
-        (item, posicion) => {
-
-            const producto =
-                productos[item.indice];
-
-            const subtotal =
-                producto.precio *
-                item.cantidad;
-
-            total += subtotal;
-
-
-            tabla.innerHTML += `
-
-            <tr>
-
-                <td>${producto.nombre}</td>
-
-                <td>${item.cantidad}</td>
-
-                <td>
-                $${Number(producto.precio).toFixed(2)}
-                </td>
-
-                <td>
-                $${subtotal.toFixed(2)}
-                </td>
-
-                <td>
-
-                    <button
-                    class="btn btn-red"
-                    onclick="quitarDelCarrito(${posicion})">
-                    🗑️
-                    </button>
-
-                </td>
-
-            </tr>
-
-            `;
-        }
-    );
-
-
-    document.getElementById(
-        "totalCarrito"
-    ).innerText =
-    total.toFixed(2);
-}
-
-
-function quitarDelCarrito(posicion) {
-
-    carrito.splice(posicion, 1);
-
-    mostrarCarrito();
-}
-
-
-/* REALIZAR VENTA */
-
-function realizarVenta() {
-
-    if (carrito.length === 0) {
-
-        alert("El carrito está vacío.");
-
-        return;
     }
 
 
-    let total = 0;
+    // =====================================================
+    // MOSTRAR INVENTARIO
+    // =====================================================
 
+    function mostrarInventario() {
 
-    for (const item of carrito) {
-
-        const producto =
-            productos[item.indice];
-
-
-        if (
-            item.cantidad >
-            producto.stock
-        ) {
-
-            alert(
-                "No hay suficiente stock de " +
-                producto.nombre
+        const tabla =
+            document.getElementById(
+                "tablaInventario"
             );
 
-            return;
-        }
 
-
-        total +=
-            producto.precio *
-            item.cantidad;
-    }
-
-
-    const pago =
-        document.getElementById(
-            "formaPago"
-        ).value;
-
-
-    const detalle =
-        carrito.map(item => {
-
-            const p =
-                productos[item.indice];
-
-            const anterior =
-                p.stock;
-
-            p.stock -=
-                item.cantidad;
-
-
-            movimientos.unshift({
-
-                fecha:
-                new Date()
-                .toLocaleString("es-MX"),
-
-                producto:
-                p.nombre,
-
-                tipo:
-                "salida",
-
-                cantidad:
-                item.cantidad,
-
-                anterior:
-                anterior,
-
-                nuevo:
-                p.stock,
-
-                motivo:
-                "Venta"
-
-            });
-
-
-            return {
-
-                producto:
-                p.nombre,
-
-                cantidad:
-                item.cantidad,
-
-                precio:
-                p.precio
-
-            };
-
-        });
-
-
-    ventas.unshift({
-
-        fecha:
-        new Date()
-        .toLocaleString("es-MX"),
-
-        total:
-        total,
-
-        pago:
-        pago,
-
-        productos:
-        detalle
-
-    });
-
-
-    /*
-    SOLO LAS VENTAS EN EFECTIVO
-    ENTRAN AL SALDO DE CAJA.
-    */
-
-    if (pago === "Efectivo") {
-
-        caja.unshift({
-
-            fecha:
-            new Date()
-            .toLocaleString("es-MX"),
-
-            tipo:
-            "ingreso",
-
-            concepto:
-            "Venta",
-
-            monto:
-            total,
-
-            pago:
-            "Efectivo"
-
-        });
-
-    }
-
-
-    carrito = [];
-
-    guardarDatos();
-
-    actualizarTodo();
-
-    mostrarCarrito();
-
-
-    alert(
-        "Venta registrada correctamente.\n\n" +
-        "Total: $" +
-        total.toFixed(2) +
-        "\nForma de pago: " +
-        pago
-    );
-}
-
-
-/* HISTORIAL DE VENTAS */
-
-function mostrarVentas() {
-
-    const tabla =
-        document.getElementById(
-            "tablaVentas"
-        );
-
-    tabla.innerHTML = "";
-
-
-    ventas.forEach(venta => {
-
-        const productosTexto =
-            venta.productos
-            .map(p =>
-                p.producto +
-                " x" +
-                p.cantidad
-            )
-            .join(", ");
-
-
-        tabla.innerHTML += `
-
-        <tr>
-
-            <td>${venta.fecha}</td>
-
-            <td>
-            $${Number(venta.total).toFixed(2)}
-            </td>
-
-            <td>${venta.pago}</td>
-
-            <td>${productosTexto}</td>
-
-        </tr>
-
-        `;
-
-    });
-
-
-    const total =
-        ventas.reduce(
-            (suma, venta) =>
-            suma + Number(venta.total),
-            0
-        );
-
-
-    document.getElementById(
-        "totalVentas"
-    ).innerText =
-    "$" + total.toFixed(2);
-}
-
-
-/* INVENTARIO */
-
-function registrarMovimiento() {
-
-    const indice =
-        document.getElementById(
-            "productoMovimiento"
-        ).value;
-
-
-    const tipo =
-        document.getElementById(
-            "tipoMovimiento"
-        ).value;
-
-
-    const cantidad =
-        Number(
+        const busqueda =
             document.getElementById(
-                "cantidadMovimiento"
+                "buscarProducto"
             ).value
+            .toLowerCase()
+            .trim();
+
+
+        tabla.innerHTML = "";
+
+
+        productos.forEach(
+            (producto, indice) => {
+
+                const textoBusqueda =
+                    (
+                        (producto.codigo || "") +
+                        " " +
+                        (producto.nombre || "") +
+                        " " +
+                        (producto.familia || "")
+                    ).toLowerCase();
+
+
+                if (
+                    busqueda &&
+                    !textoBusqueda.includes(busqueda)
+                ) {
+
+                    return;
+                }
+
+
+                const stockBajo =
+                    producto.stock <=
+                    producto.stockMinimo;
+
+
+                const fila =
+                    document.createElement("tr");
+
+
+                if (stockBajo) {
+
+                    fila.classList.add(
+                        "stock-bajo"
+                    );
+
+                }
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(producto.codigo || "")}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(producto.nombre || "")}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(producto.familia || "")}
+                    </td>
+
+                    <td>
+                        $${Number(producto.costo || 0).toFixed(2)}
+                    </td>
+
+                    <td>
+                        $${Number(producto.precio || 0).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${producto.stock}
+                    </td>
+
+                    <td>
+                        ${producto.stockMinimo}
+                    </td>
+
+                    <td>
+
+                        ${
+                            stockBajo
+
+                            ? `<span class="estado-bajo">
+                                ⚠️ Stock bajo
+                               </span>`
+
+                            : `<span class="estado-normal">
+                                ✓ Normal
+                               </span>`
+                        }
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-editar"
+                            onclick="editarProducto(${indice})"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            class="btn-eliminar"
+                            onclick="eliminarProducto(${indice})"
+                        >
+                            🗑️
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                tabla.appendChild(fila);
+
+            }
         );
 
+    }
 
-    const motivo =
+
+    // =====================================================
+    // RESUMEN
+    // =====================================================
+
+    function actualizarResumen() {
+
+        const totalProductos =
+            productos.length;
+
+
+        const totalUnidades =
+            productos.reduce(
+                (total, producto) =>
+                total +
+                Number(producto.stock || 0),
+                0
+            );
+
+
+        const productosBajos =
+            productos.filter(
+                producto =>
+                Number(producto.stock || 0) <=
+                Number(producto.stockMinimo || 0)
+            ).length;
+
+
         document.getElementById(
-            "motivoMovimiento"
-        ).value.trim();
+            "totalProductos"
+        ).textContent =
+            totalProductos;
 
 
-    if (indice === "") {
+        document.getElementById(
+            "totalUnidades"
+        ).textContent =
+            totalUnidades;
 
-        alert("Selecciona un producto.");
 
-        return;
+        document.getElementById(
+            "productosBajos"
+        ).textContent =
+            productosBajos;
+
     }
 
 
-    if (!cantidad || cantidad <= 0) {
+    // =====================================================
+    // ACTUALIZAR TODO
+    // =====================================================
 
-        alert("Ingresa una cantidad válida.");
+    function actualizarTodo() {
 
-        return;
+        mostrarInventario();
+
+        actualizarResumen();
+
     }
 
 
-    const producto =
-        productos[Number(indice)];
+    // =====================================================
+    // SEGURIDAD PARA TEXTO MOSTRADO EN HTML
+    // =====================================================
 
+    function escapeHTML(texto) {
 
-    const anterior =
-        producto.stock;
+        return String(texto)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
 
-
-    if (
-        tipo === "salida" &&
-        cantidad > producto.stock
-    ) {
-
-        alert("Stock insuficiente.");
-
-        return;
     }
 
 
-    if (tipo === "entrada") {
-
-        producto.stock += cantidad;
-
-    } else {
-
-        producto.stock -= cantidad;
-    }
-
-
-    movimientos.unshift({
-
-        fecha:
-        new Date()
-        .toLocaleString("es-MX"),
-
-        producto:
-        producto.nombre,
-
-        tipo:
-        tipo,
-
-        cantidad:
-        cantidad,
-
-        anterior:
-        anterior,
-
-        nuevo:
-        producto.stock,
-
-        motivo:
-        motivo || "Sin especificar"
-
-    });
-
-
-    guardarDatos();
+    // =====================================================
+    // INICIO
+    // =====================================================
 
     actualizarTodo();
-
-
-    document.getElementById(
-        "cantidadMovimiento"
-    
-
-actualizarTodo();
 
 </script>
 
