@@ -907,3 +907,1072 @@
 
 </body>
 </html>
+<!-- =====================================================
+     FERRE-SYSTEM - PARTE 2
+     VENTAS Y CAJA
+     ===================================================== -->
+
+<style>
+    .fs2-panel {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .fs2-panel h2 {
+        color: #17365d;
+        margin-top: 0;
+    }
+
+    .fs2-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .fs2-campo {
+        margin-bottom: 12px;
+    }
+
+    .fs2-campo label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .fs2-campo input,
+    .fs2-campo select {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    .fs2-botones {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
+
+    .fs2-tabla {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    .fs2-tabla th,
+    .fs2-tabla td {
+        padding: 9px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .fs2-tabla th {
+        background: #17365d;
+        color: white;
+    }
+
+    .fs2-total {
+        text-align: right;
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 15px;
+        color: #17365d;
+    }
+
+    .fs2-resumen {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .fs2-tarjeta {
+        background: #f4f6f8;
+        padding: 15px;
+        border-radius: 9px;
+        text-align: center;
+    }
+
+    .fs2-tarjeta strong {
+        display: block;
+        font-size: 23px;
+        color: #17365d;
+        margin-top: 5px;
+    }
+
+    .fs2-btn {
+        border: none;
+        border-radius: 7px;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .fs2-azul {
+        background: #17365d;
+        color: white;
+    }
+
+    .fs2-rojo {
+        background: #c62828;
+        color: white;
+    }
+
+    .fs2-gris {
+        background: #777;
+        color: white;
+    }
+
+    @media (max-width: 800px) {
+        .fs2-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .fs2-resumen {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+
+
+<!-- =====================================================
+     VENTAS
+     ===================================================== -->
+
+<section class="fs2-panel">
+
+    <h2>🛒 Ventas</h2>
+
+    <div class="fs2-grid">
+
+        <div>
+
+            <div class="fs2-campo">
+
+                <label>Producto</label>
+
+                <select id="fs2ProductoVenta">
+
+                    <option value="">
+                        Selecciona un producto
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="fs2-campo">
+
+                <label>Cantidad</label>
+
+                <input
+                    type="number"
+                    id="fs2CantidadVenta"
+                    min="1"
+                    value="1"
+                >
+
+            </div>
+
+
+            <div class="fs2-botones">
+
+                <button
+                    class="fs2-btn fs2-azul"
+                    onclick="fs2AgregarProducto()"
+                >
+                    Agregar producto
+                </button>
+
+                <button
+                    class="fs2-btn fs2-gris"
+                    onclick="fs2CancelarVenta()"
+                >
+                    Cancelar venta
+                </button>
+
+            </div>
+
+
+            <table class="fs2-tabla">
+
+                <thead>
+
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="fs2ListaVenta"></tbody>
+
+            </table>
+
+
+            <div class="fs2-total">
+
+                Total:
+                $<span id="fs2TotalVenta">0.00</span>
+
+            </div>
+
+
+            <div class="fs2-campo" style="margin-top:15px;">
+
+                <label>Forma de pago</label>
+
+                <select id="fs2FormaPago">
+
+                    <option value="Efectivo">
+                        Efectivo
+                    </option>
+
+                    <option value="Tarjeta">
+                        Tarjeta
+                    </option>
+
+                    <option value="Transferencia">
+                        Transferencia
+                    </option>
+
+                    <option value="Crédito">
+                        Crédito
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="fs2-btn fs2-azul"
+                onclick="fs2ConfirmarVenta()"
+            >
+                Confirmar venta
+            </button>
+
+        </div>
+
+
+        <!-- CAJA -->
+
+        <div>
+
+            <h3>💰 Caja actual</h3>
+
+            <div class="fs2-tarjeta">
+
+                Saldo
+
+                <strong>
+                    $<span id="fs2Caja">0.00</span>
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ENTRADAS Y SALIDAS
+     ===================================================== -->
+
+<section class="fs2-panel">
+
+    <h2>💰 Caja</h2>
+
+    <div class="fs2-grid">
+
+        <div>
+
+            <h3>➕ Entrada</h3>
+
+            <div class="fs2-campo">
+
+                <label>Concepto</label>
+
+                <input
+                    type="text"
+                    id="fs2EntradaConcepto"
+                    placeholder="Concepto"
+                >
+
+            </div>
+
+            <div class="fs2-campo">
+
+                <label>Monto</label>
+
+                <input
+                    type="number"
+                    id="fs2EntradaMonto"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+            <button
+                class="fs2-btn fs2-azul"
+                onclick="fs2Entrada()"
+            >
+                Registrar entrada
+            </button>
+
+        </div>
+
+
+        <div>
+
+            <h3>➖ Salida</h3>
+
+            <div class="fs2-campo">
+
+                <label>Concepto</label>
+
+                <input
+                    type="text"
+                    id="fs2SalidaConcepto"
+                    placeholder="Concepto"
+                >
+
+            </div>
+
+            <div class="fs2-campo">
+
+                <label>Monto</label>
+
+                <input
+                    type="number"
+                    id="fs2SalidaMonto"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+            <button
+                class="fs2-btn fs2-rojo"
+                onclick="fs2Salida()"
+            >
+                Registrar salida
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     REPORTE DIARIO
+     ===================================================== -->
+
+<section class="fs2-panel">
+
+    <h2>📊 Reporte de ventas de hoy</h2>
+
+    <div class="fs2-resumen">
+
+        <div class="fs2-tarjeta">
+            Ventas
+            <strong id="fs2NumeroVentas">0</strong>
+        </div>
+
+        <div class="fs2-tarjeta">
+            Total vendido
+            <strong>
+                $<span id="fs2TotalVentas">0.00</span>
+            </strong>
+        </div>
+
+        <div class="fs2-tarjeta">
+            Entradas
+            <strong>
+                $<span id="fs2TotalEntradas">0.00</span>
+            </strong>
+        </div>
+
+        <div class="fs2-tarjeta">
+            Salidas
+            <strong>
+                $<span id="fs2TotalSalidas">0.00</span>
+            </strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+    /* =====================================================
+       DATOS DE PARTE 2
+       ===================================================== */
+
+    let fs2Ventas =
+        JSON.parse(
+            localStorage.getItem("ferre_ventas")
+        ) || [];
+
+
+    let fs2CajaMovimientos =
+        JSON.parse(
+            localStorage.getItem("ferre_caja")
+        ) || [];
+
+
+    let fs2VentaActual = [];
+
+
+    /* =====================================================
+       GUARDAR
+       ===================================================== */
+
+    function fs2Guardar() {
+
+        localStorage.setItem(
+            "ferre_ventas",
+            JSON.stringify(fs2Ventas)
+        );
+
+        localStorage.setItem(
+            "ferre_caja",
+            JSON.stringify(fs2CajaMovimientos)
+        );
+
+    }
+
+
+    /* =====================================================
+       CARGAR PRODUCTOS DEL INVENTARIO
+       ===================================================== */
+
+    function fs2CargarProductos() {
+
+        const select =
+            document.getElementById(
+                "fs2ProductoVenta"
+            );
+
+
+        select.innerHTML = `
+            <option value="">
+                Selecciona un producto
+            </option>
+        `;
+
+
+        if (
+            typeof productos === "undefined" ||
+            !Array.isArray(productos)
+        ) {
+
+            return;
+
+        }
+
+
+        productos.forEach(
+            (producto, indice) => {
+
+                const opcion =
+                    document.createElement("option");
+
+
+                opcion.value = indice;
+
+
+                opcion.textContent =
+                    producto.nombre +
+                    " | Stock: " +
+                    producto.stock +
+                    " | $" +
+                    Number(
+                        producto.precio || 0
+                    ).toFixed(2);
+
+
+                select.appendChild(opcion);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       AGREGAR PRODUCTO
+       ===================================================== */
+
+    function fs2AgregarProducto() {
+
+        const valor =
+            document.getElementById(
+                "fs2ProductoVenta"
+            ).value;
+
+
+        const cantidad =
+            Number(
+                document.getElementById(
+                    "fs2CantidadVenta"
+                ).value
+            );
+
+
+        if (valor === "") {
+
+            alert(
+                "Selecciona un producto."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !cantidad ||
+            cantidad <= 0
+        ) {
+
+            alert(
+                "Ingresa una cantidad válida."
+            );
+
+            return;
+
+        }
+
+
+        const indice =
+            Number(valor);
+
+
+        const producto =
+            productos[indice];
+
+
+        if (!producto) {
+
+            alert(
+                "Producto no encontrado."
+            );
+
+            return;
+
+        }
+
+
+        const existente =
+            fs2VentaActual.find(
+                item =>
+                item.indice === indice
+            );
+
+
+        const cantidadActual =
+            existente
+            ? existente.cantidad
+            : 0;
+
+
+        if (
+            cantidadActual + cantidad >
+            Number(producto.stock)
+        ) {
+
+            alert(
+                "Stock insuficiente."
+            );
+
+            return;
+
+        }
+
+
+        if (existente) {
+
+            existente.cantidad +=
+                cantidad;
+
+        } else {
+
+            fs2VentaActual.push({
+
+                indice:
+                    indice,
+
+                cantidad:
+                    cantidad
+
+            });
+
+        }
+
+
+        fs2MostrarVenta();
+
+    }
+
+
+    /* =====================================================
+       MOSTRAR VENTA
+       ===================================================== */
+
+    function fs2MostrarVenta() {
+
+        const tabla =
+            document.getElementById(
+                "fs2ListaVenta"
+            );
+
+
+        tabla.innerHTML = "";
+
+
+        let total = 0;
+
+
+        fs2VentaActual.forEach(
+            (item, posicion) => {
+
+                const producto =
+                    productos[item.indice];
+
+
+                const subtotal =
+                    Number(
+                        producto.precio || 0
+                    ) *
+                    item.cantidad;
+
+
+                total += subtotal;
+
+
+                const fila =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(producto.nombre)}
+                    </td>
+
+                    <td>
+                        ${item.cantidad}
+                    </td>
+
+                    <td>
+                        $${Number(
+                            producto.precio || 0
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+                        $${subtotal.toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="fs2-btn fs2-rojo"
+                            onclick="fs2QuitarProducto(${posicion})"
+                        >
+                            🗑️
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                tabla.appendChild(fila);
+
+            }
+        );
+
+
+        document.getElementById(
+            "fs2TotalVenta"
+        ).textContent =
+            total.toFixed(2);
+
+    }
+
+
+    /* =====================================================
+       QUITAR PRODUCTO
+       ===================================================== */
+
+    function fs2QuitarProducto(posicion) {
+
+        fs2VentaActual.splice(
+            posicion,
+            1
+        );
+
+
+        fs2MostrarVenta();
+
+    }
+
+
+    /* =====================================================
+       CONFIRMAR VENTA
+       ===================================================== */
+
+    function fs2ConfirmarVenta() {
+
+        if (
+            fs2VentaActual.length === 0
+        ) {
+
+            alert(
+                "Agrega al menos un producto."
+            );
+
+            return;
+
+        }
+
+
+        const formaPago =
+            document.getElementById(
+                "fs2FormaPago"
+            ).value;
+
+
+        let total = 0;
+
+
+        fs2VentaActual.forEach(
+            item => {
+
+                const producto =
+                    productos[item.indice];
+
+
+                total +=
+                    Number(
+                        producto.precio || 0
+                    ) *
+                    item.cantidad;
+
+            }
+        );
+
+
+        const confirmar =
+            confirm(
+                "¿Confirmar venta por $" +
+                total.toFixed(2) +
+                "?"
+            );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
+        /* DESCONTAR INVENTARIO */
+
+        fs2VentaActual.forEach(
+            item => {
+
+                productos[
+                    item.indice
+                ].stock -=
+                    item.cantidad;
+
+            }
+        );
+
+
+        /* REGISTRAR VENTA */
+
+        fs2Ventas.unshift({
+
+            fecha:
+                new Date().toLocaleString(
+                    "es-MX"
+                ),
+
+            fechaISO:
+                new Date().toISOString(),
+
+            total:
+                total,
+
+            formaPago:
+                formaPago,
+
+            productos:
+                fs2VentaActual.map(
+                    item => {
+
+                        const producto =
+                            productos[
+                                item.indice
+                            ];
+
+
+                        return {
+
+                            nombre:
+                                producto.nombre,
+
+                            codigo:
+                                producto.codigo,
+
+                            cantidad:
+                                item.cantidad,
+
+                            precio:
+                                Number(
+                                    producto.precio || 0
+                                ),
+
+                            costo:
+                                Number(
+                                    producto.costo || 0
+                                )
+
+                        };
+
+                    }
+                )
+
+        });
+
+
+        /* REGISTRAR DINERO EN CAJA */
+
+        if (
+            formaPago !== "Crédito"
+        ) {
+
+            fs2CajaMovimientos.unshift({
+
+                fechaISO:
+                    new Date().toISOString(),
+
+                fecha:
+                    new Date().toLocaleString(
+                        "es-MX"
+                    ),
+
+                tipo:
+                    "entrada",
+
+                concepto:
+                    "Venta",
+
+                monto:
+                    total,
+
+                formaPago:
+                    formaPago
+
+            });
+
+        }
+
+
+        /* GUARDAR */
+
+        if (
+            typeof guardarDatos ===
+            "function"
+        ) {
+
+            guardarDatos();
+
+        }
+
+
+        fs2Guardar();
+
+
+        fs2VentaActual = [];
+
+
+        fs2MostrarVenta();
+
+        fs2CargarProductos();
+
+        fs2ActualizarCaja();
+
+        fs2ActualizarReporte();
+
+
+        alert(
+            "Venta registrada correctamente."
+        );
+
+    }
+
+
+    /* =====================================================
+       CANCELAR VENTA
+       ===================================================== */
+
+    function fs2CancelarVenta() {
+
+        fs2VentaActual = [];
+
+        fs2MostrarVenta();
+
+    }
+
+
+    /* =====================================================
+       ENTRADA DE CAJA
+       ===================================================== */
+
+    function fs2Entrada() {
+
+        const concepto =
+            document.getElementById(
+                "fs2EntradaConcepto"
+            ).value.trim();
+
+
+        const monto =
+            Number(
+                document.getElementById(
+                    "fs2EntradaMonto"
+                ).value
+            );
+
+
+        if (!concepto) {
+
+            alert(
+                "Ingresa el concepto."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !monto ||
+            monto <= 0
+        ) {
+
+            alert(
+                "Ingresa un monto válido."
+            );
+
+            return;
+
+        }
+
+
+        fs2CajaMovimientos.unshift({
+
+            fechaISO:
+                new Date().toISOString(),
+
+            fecha:
+                new Date().toLocaleString(
+                    "es-MX"
+                ),
+
+            tipo:
+                "entrada",
+
+            concepto:
+                concepto,
+
+            monto:
+                monto
+
+        });
+
+
+        fs2Guardar();
+
+        fs2ActualizarCaja();
+
+        fs2ActualizarReporte();
+
+
+        document.getElementById(
+            "fs2EntradaConcepto"
+        ).value = "";
+
+
+        document.getElementById(
+            "fs2EntradaMonto"
+        ).value = "";
+
+
+        alert(
+            "Entrada registrada."
+        );
+
+    }
+
+
+    /* =====================================================
+       SALIDA DE CAJA
+       ===================================================== */
+
+    function fs2Salida() {
+
+        const concepto =
+            document.getElementById(
+                "fs2SalidaConcepto"
+            ).value.trim();
+
+
+        const monto =
+            Number(
+                document.getElementById(
+                    "fs2SalidaMonto"
+                ).value
+            );
+
+
+        if (!concepto) {
+
+            alert(
+                "Ingresa el concepto."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !monto ||
+            
