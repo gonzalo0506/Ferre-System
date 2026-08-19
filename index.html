@@ -907,3 +907,912 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ferre-System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            color: #222;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            opacity: 0.9;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: #17365d;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campo label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .btn-principal {
+            background: #17365d;
+            color: white;
+        }
+
+        .btn-editar {
+            background: #e7b416;
+            color: white;
+        }
+
+        .btn-eliminar {
+            background: #c62828;
+            color: white;
+        }
+
+        .btn-cancelar {
+            background: #777;
+            color: white;
+        }
+
+        .acciones-form {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .busqueda {
+            margin-bottom: 15px;
+        }
+
+        .busqueda input {
+            width: 100%;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #17365d;
+            color: white;
+        }
+
+        tr.stock-bajo {
+            background: #fff1f1;
+        }
+
+        .estado-normal {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        .estado-bajo {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .resumen {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .tarjeta {
+            background: #f7f9fb;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .tarjeta strong {
+            display: block;
+            font-size: 28px;
+            margin-top: 5px;
+            color: #17365d;
+        }
+
+        @media (max-width: 800px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resumen {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Ferre-System</h1>
+    <p>Administración sencilla para ferreterías</p>
+</header>
+
+<main>
+
+    <!-- RESUMEN -->
+    <section class="panel">
+
+        <h2>Resumen de inventario</h2>
+
+        <div class="resumen">
+
+            <div class="tarjeta">
+                Productos
+                <strong id="totalProductos">0</strong>
+            </div>
+
+            <div class="tarjeta">
+                Unidades
+                <strong id="totalUnidades">0</strong>
+            </div>
+
+            <div class="tarjeta">
+                Stock bajo
+                <strong id="productosBajos">0</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FORMULARIO -->
+    <section class="panel">
+
+        <h2 id="tituloFormulario">Agregar producto</h2>
+
+        <input
+            type="hidden"
+            id="indiceEdicion"
+        >
+
+        <div class="form-grid">
+
+            <div class="campo">
+                <label for="codigo">Código</label>
+                <input
+                    type="text"
+                    id="codigo"
+                    placeholder="Ej. T001"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="nombre">Producto</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    placeholder="Nombre del producto"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="familia">Familia</label>
+                <input
+                    type="text"
+                    id="familia"
+                    placeholder="Ej. Plomería"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="costo">Costo</label>
+                <input
+                    type="number"
+                    id="costo"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="precio">Precio de venta</label>
+                <input
+                    type="number"
+                    id="precio"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="stock">Existencia</label>
+                <input
+                    type="number"
+                    id="stock"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="stockMinimo">Stock mínimo</label>
+                <input
+                    type="number"
+                    id="stockMinimo"
+                    min="0"
+                    step="1"
+                    placeholder="Ej. 5"
+                >
+            </div>
+
+        </div>
+
+        <div class="acciones-form">
+
+            <button
+                class="btn-principal"
+                onclick="guardarProducto()"
+            >
+                Guardar producto
+            </button>
+
+            <button
+                class="btn-cancelar"
+                id="btnCancelar"
+                onclick="cancelarEdicion()"
+                style="display:none;"
+            >
+                Cancelar edición
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- INVENTARIO -->
+    <section class="panel">
+
+        <h2>Inventario</h2>
+
+        <div class="busqueda">
+
+            <input
+                type="text"
+                id="buscarProducto"
+                placeholder="🔎 Buscar por código, nombre o familia..."
+                oninput="mostrarInventario()"
+            >
+
+        </div>
+
+        <div class="tabla-contenedor">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Familia</th>
+                        <th>Costo</th>
+                        <th>Precio</th>
+                        <th>Existencia</th>
+                        <th>Mínimo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tablaInventario"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    // =====================================================
+    // DATOS PRINCIPALES
+    // =====================================================
+
+    let productos =
+        JSON.parse(
+            localStorage.getItem("ferre_productos")
+        ) || [];
+
+
+    // =====================================================
+    // GUARDAR DATOS
+    // =====================================================
+
+    function guardarDatos() {
+
+        localStorage.setItem(
+            "ferre_productos",
+            JSON.stringify(productos)
+        );
+
+    }
+
+
+    // =====================================================
+    // LIMPIAR FORMULARIO
+    // =====================================================
+
+    function limpiarFormulario() {
+
+        document.getElementById("codigo").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("familia").value = "";
+        document.getElementById("costo").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("stock").value = "";
+        document.getElementById("stockMinimo").value = "";
+
+        document.getElementById("indiceEdicion").value = "";
+
+        document.getElementById(
+            "tituloFormulario"
+        ).textContent = "Agregar producto";
+
+        document.getElementById(
+            "btnCancelar"
+        ).style.display = "none";
+
+    }
+
+
+    // =====================================================
+    // GUARDAR / MODIFICAR PRODUCTO
+    // =====================================================
+
+    function guardarProducto() {
+
+        const codigo =
+            document.getElementById("codigo").value.trim();
+
+        const nombre =
+            document.getElementById("nombre").value.trim();
+
+        const familia =
+            document.getElementById("familia").value.trim();
+
+        const costo =
+            Number(document.getElementById("costo").value);
+
+        const precio =
+            Number(document.getElementById("precio").value);
+
+        const stock =
+            Number(document.getElementById("stock").value);
+
+        const stockMinimo =
+            Number(
+                document.getElementById("stockMinimo").value
+            );
+
+
+        if (!nombre) {
+
+            alert("Ingresa el nombre del producto.");
+
+            return;
+        }
+
+
+        if (costo < 0 || precio < 0) {
+
+            alert("El costo y el precio no pueden ser negativos.");
+
+            return;
+        }
+
+
+        if (stock < 0 || stockMinimo < 0) {
+
+            alert("La existencia y el stock mínimo no pueden ser negativos.");
+
+            return;
+        }
+
+
+        const indice =
+            document.getElementById(
+                "indiceEdicion"
+            ).value;
+
+
+        // =================================================
+        // MODIFICAR
+        // =================================================
+
+        if (indice !== "") {
+
+            const producto =
+                productos[Number(indice)];
+
+
+            producto.codigo = codigo;
+            producto.nombre = nombre;
+            producto.familia = familia;
+            producto.costo = costo;
+            producto.precio = precio;
+            producto.stock = stock;
+            producto.stockMinimo = stockMinimo;
+
+
+            alert("Producto modificado correctamente.");
+
+        }
+
+
+        // =================================================
+        // NUEVO PRODUCTO
+        // =================================================
+
+        else {
+
+            const codigoExiste =
+                productos.some(
+                    producto =>
+                    codigo &&
+                    producto.codigo.toLowerCase() ===
+                    codigo.toLowerCase()
+                );
+
+
+            if (codigoExiste) {
+
+                alert("Ese código ya existe.");
+
+                return;
+            }
+
+
+            productos.push({
+
+                codigo:
+                    codigo,
+
+                nombre:
+                    nombre,
+
+                familia:
+                    familia,
+
+                costo:
+                    costo,
+
+                precio:
+                    precio,
+
+                stock:
+                    stock,
+
+                stockMinimo:
+                    stockMinimo,
+
+                fechaCreacion:
+                    new Date().toLocaleString("es-MX")
+
+            });
+
+
+            alert("Producto agregado correctamente.");
+
+        }
+
+
+        guardarDatos();
+
+        limpiarFormulario();
+
+        actualizarTodo();
+
+    }
+
+
+    // =====================================================
+    // EDITAR PRODUCTO
+    // =====================================================
+
+    function editarProducto(indice) {
+
+        const producto =
+            productos[indice];
+
+
+        document.getElementById("codigo").value =
+            producto.codigo || "";
+
+        document.getElementById("nombre").value =
+            producto.nombre || "";
+
+        document.getElementById("familia").value =
+            producto.familia || "";
+
+        document.getElementById("costo").value =
+            producto.costo || 0;
+
+        document.getElementById("precio").value =
+            producto.precio || 0;
+
+        document.getElementById("stock").value =
+            producto.stock || 0;
+
+        document.getElementById("stockMinimo").value =
+            producto.stockMinimo || 0;
+
+
+        document.getElementById(
+            "indiceEdicion"
+        ).value = indice;
+
+
+        document.getElementById(
+            "tituloFormulario"
+        ).textContent = "Modificar producto";
+
+
+        document.getElementById(
+            "btnCancelar"
+        ).style.display = "inline-block";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    // =====================================================
+    // ELIMINAR PRODUCTO
+    // =====================================================
+
+    function eliminarProducto(indice) {
+
+        const producto =
+            productos[indice];
+
+
+        const confirmar =
+            confirm(
+                "¿Seguro que deseas eliminar " +
+                producto.nombre +
+                "?"
+            );
+
+
+        if (!confirmar) {
+
+            return;
+        }
+
+
+        productos.splice(indice, 1);
+
+        guardarDatos();
+
+        actualizarTodo();
+
+    }
+
+
+    // =====================================================
+    // CANCELAR EDICIÓN
+    // =====================================================
+
+    function cancelarEdicion() {
+
+        limpiarFormulario();
+
+    }
+
+
+    // =====================================================
+    // MOSTRAR INVENTARIO
+    // =====================================================
+
+    function mostrarInventario() {
+
+        const tabla =
+            document.getElementById(
+                "tablaInventario"
+            );
+
+
+        const busqueda =
+            document.getElementById(
+                "buscarProducto"
+            ).value
+            .toLowerCase()
+            .trim();
+
+
+        tabla.innerHTML = "";
+
+
+        productos.forEach(
+            (producto, indice) => {
+
+                const textoBusqueda =
+                    (
+                        (producto.codigo || "") +
+                        " " +
+                        (producto.nombre || "") +
+                        " " +
+                        (producto.familia || "")
+                    ).toLowerCase();
+
+
+                if (
+                    busqueda &&
+                    !textoBusqueda.includes(busqueda)
+                ) {
+
+                    return;
+                }
+
+
+                const stockBajo =
+                    producto.stock <=
+                    producto.stockMinimo;
+
+
+                const fila =
+                    document.createElement("tr");
+
+
+                if (stockBajo) {
+
+                    fila.classList.add(
+                        "stock-bajo"
+                    );
+
+                }
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(producto.codigo || "")}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(producto.nombre || "")}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(producto.familia || "")}
+                    </td>
+
+                    <td>
+                        $${Number(producto.costo || 0).toFixed(2)}
+                    </td>
+
+                    <td>
+                        $${Number(producto.precio || 0).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${producto.stock}
+                    </td>
+
+                    <td>
+                        ${producto.stockMinimo}
+                    </td>
+
+                    <td>
+
+                        ${
+                            stockBajo
+
+                            ? `<span class="estado-bajo">
+                                ⚠️ Stock bajo
+                               </span>`
+
+                            : `<span class="estado-normal">
+                                ✓ Normal
+                               </span>`
+                        }
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-editar"
+                            onclick="editarProducto(${indice})"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            class="btn-eliminar"
+                            onclick="eliminarProducto(${indice})"
+                        >
+                            🗑️
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                tabla.appendChild(fila);
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // RESUMEN
+    // =====================================================
+
+    function actualizarResumen() {
+
+        const totalProductos =
+            productos.length;
+
+
+        const totalUnidades =
+            productos.reduce(
+                (total, producto) =>
+                total +
+                Number(producto.stock || 0),
+                0
+            );
+
+
+        const productosBajos =
+            productos.filter(
+                producto =>
+                Number(producto.stock || 0) <=
+                Number(producto.stockMinimo || 0)
+            ).length;
+
+
+        document.getElementById(
+            "totalProductos"
+        ).textContent =
+            totalProductos;
+
+
+        document.getElementById(
+            "totalUnidades"
+        ).textContent =
+            totalUnidades;
+
+
+        document.getElementById(
+            "productosBajos"
+        ).textContent =
+            productosBajos;
+
+    }
+
+
+    // =====================================================
+    // ACTUALIZAR TODO
+    // =====================================================
+
+    function actualizarTodo() {
+
+        mostrarInventario();
+
+        actualizarResumen();
+
+    }
+
+
+    // =====================================================
+    // SEGURIDAD PARA TEXTO MOSTRADO EN HTML
+    // =====================================================
+
+    function escapeHTML(texto) {
+
+        return String(texto)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    // =====================================================
+    // INICIO
+    // =====================================================
+
+    actualizarTodo();
+
+</script>
+
+</body>
+</html>
